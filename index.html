@@ -562,6 +562,7 @@
         maps: "https://maps.google.com/?q=ハンバーグレストランBOSTON+長居店",
         price: 1000,
         rating: 3.41,
+        lat: 34.60958, lng: 135.51347
       },
       {
         name: "こてぶき", category: "大阪烧",
@@ -889,9 +890,10 @@
 
     function renderList() {
       const list = document.getElementById('restaurantList');
-      const filtered = activeFilter
+      const filtered = (activeFilter
         ? restaurants.filter(r => r.category === activeFilter)
-        : restaurants;
+        : [...restaurants]
+      ).sort((a, b) => b.rating - a.rating);
 
       document.getElementById('totalCount').textContent = filtered.length;
 
