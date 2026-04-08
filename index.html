@@ -93,12 +93,38 @@
       transition: width 0.5s;
     }
 
+    /* 主布局：电脑端左右分栏 */
+    .main-layout {
+      display: flex;
+      flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 900px) {
+      .main-layout {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+      .left-panel {
+        flex: 0 0 400px;
+        position: sticky;
+        top: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+      .right-panel {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
     .card {
       background: #1a1a2e;
       padding: 1.5rem;
-      margin: 1.5rem auto;
-      max-width: 480px;
-      width: calc(100% - 2rem);
+      margin: 0 0 1.5rem;
       text-align: center;
     }
 
@@ -180,27 +206,26 @@
 
     /* 地图区域 */
     .map-section {
-      width: calc(100% - 2rem);
-      max-width: 960px;
-      margin: 0 auto 2rem;
+      width: 100%;
     }
-
-    .map-section h3 {
-      font-size: 0.85rem;
-      color: #66aaff;
-      margin-bottom: 0.8rem;
-      text-align: center;
-      text-shadow: 1px 1px 0 #224488;
-    }
-
-    .map-section h3::before { content: "> "; color: #ffcc00; }
 
     #mapContainer {
       width: 100%;
-      height: 80vh;
-      min-height: 500px;
+      height: 60vh;
+      min-height: 400px;
       border: 3px solid #555;
       background: #1a1a2e;
+    }
+
+    @media (min-width: 900px) {
+      .right-panel .map-section {
+        position: sticky;
+        top: 1rem;
+      }
+      #mapContainer {
+        height: calc(100vh - 5rem);
+        min-height: 500px;
+      }
     }
 
     .leaflet-container {
@@ -269,9 +294,8 @@
     }
 
     .list-section {
-      max-width: 720px;
-      width: calc(100% - 2rem);
-      margin: 0 auto 3rem;
+      width: 100%;
+      margin: 0 0 2rem;
     }
 
     .list-section h3 {
@@ -311,12 +335,6 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 0.4rem;
-    }
-
-    @media (min-width: 540px) {
-      .restaurant-list-grid {
-        grid-template-columns: 1fr 1fr;
-      }
     }
 
     .restaurant-item {
@@ -396,25 +414,30 @@
     </div>
   </header>
 
-  <div class="card pixel-border-gold" id="mainCard">
-    <div id="cardContent"></div>
-  </div>
+  <div class="main-layout">
+    <div class="left-panel">
+      <div class="card pixel-border-gold" id="mainCard">
+        <div id="cardContent"></div>
+      </div>
 
-  <div class="map-section">
-    <h3>MAP</h3>
-    <div id="mapContainer" class="pixel-border"></div>
-    <div class="map-legend">
-      <span><span class="dot" style="background:#4488ff;"></span>车站</span>
-      <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
-      <span><span class="dot" style="background:#44ff44;"></span>今日推荐</span>
-    </div>
-  </div>
-
-  <div class="list-section">
+      <div class="list-section">
     <h3>全部店铺（<span id="totalCount"></span>家）</h3>
     <div class="filter-bar" id="filterBar"></div>
     <div class="restaurant-list-grid" id="restaurantList"></div>
-  </div>
+      </div>
+    </div><!-- left-panel -->
+
+    <div class="right-panel">
+      <div class="map-section">
+        <div id="mapContainer" class="pixel-border"></div>
+        <div class="map-legend">
+          <span><span class="dot" style="background:#4488ff;"></span>车站</span>
+          <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
+          <span><span class="dot" style="background:#44ff44;"></span>今日推荐</span>
+        </div>
+      </div>
+    </div><!-- right-panel -->
+  </div><!-- main-layout -->
 
   <script>
     // 坐标来源：国土地理院GSI API + OSM Overpass API 实测
