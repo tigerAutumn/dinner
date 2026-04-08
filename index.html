@@ -378,10 +378,21 @@
       50% { opacity: 0.3; }
     }
 
-    .cursor-blink::after {
-      content: '_';
+    .cursor-blink {
       animation: blink 1s infinite;
-      color: #ffcc00;
+    }
+
+    .hp-bar .bar-text {
+      color: #aaa;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+
+    .hp-bar .sunday-msg {
+      color: #66ff66;
+      font-size: 0.75rem;
+      text-align: center;
+      line-height: 1.6;
     }
 
     body::after {
@@ -406,12 +417,9 @@
 </head>
 <body>
   <header>
-    <h1>今晚吃什么？</h1>
-    <div class="date-display cursor-blink" id="dateDisplay"></div>
-    <div class="hp-bar">
-      <span class="label">HUNGER</span>
-      <div class="bar-bg"><div class="bar-fill" id="hungerBar" style="width:85%"></div></div>
-    </div>
+    <h1>今晚吃什么<span class="cursor-blink">？</span></h1>
+    <div class="date-display" id="dateDisplay"></div>
+    <div class="hp-bar" id="hpBar"></div>
   </header>
 
   <div class="main-layout">
@@ -738,15 +746,19 @@
       return jst.getUTCFullYear() * 10000 + (jst.getUTCMonth() + 1) * 100 + jst.getUTCDate();
     }
 
-    function getTodayStr() {
+    function getJST() {
       const now = new Date();
-      const jst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      return new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    }
+
+    function getTodayStr() {
+      const jst = getJST();
       const y = jst.getUTCFullYear();
       const m = String(jst.getUTCMonth() + 1).padStart(2, '0');
       const d = String(jst.getUTCDate()).padStart(2, '0');
-      const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+      const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
       const w = weekdays[jst.getUTCDay()];
-      return `${y}年${m}月${d}日（${w}）`;
+      return `${y}年${m}月${d}日 ${w}`;
     }
 
     function getDailyPick() {
@@ -785,6 +797,28 @@
     }
 
     function renderCard() {
+      const jst = getJST();
+      const day = jst.getUTCDay(); // 0=日
+
+      // 周日特殊处理
+      if (day === 0) {
+        document.getElementById('cardContent').innerHTML = `
+          <div style="padding:1rem 0;">
+            <div style="font-size:2rem;margin-bottom:0.8rem;color:#66ff66;">
+              [  ^_^  ]
+            </div>
+            <div style="font-size:2rem;margin-bottom:0.5rem;">
+              zzZ...
+            </div>
+            <p style="color:#66ff66;font-size:0.9rem;margin-bottom:0.5rem;">今天是周日</p>
+            <p style="color:#888;font-size:0.75rem;">在家休息，不用考虑晚饭</p>
+          </div>
+        `;
+        document.getElementById('dateDisplay').textContent = getTodayStr();
+        renderHpBar();
+        return;
+      }
+
       currentPickIdx = getDailyPick();
       const r = restaurants[currentPickIdx];
       const closedText = getClosedText(r);
@@ -793,17 +827,59 @@
         <span class="category">${r.category}</span>
         <span class="price-tag">~${r.price}円</span>
         <h2>${r.name}</h2>
-        <p class="address">${r.address}</p>
         <p class="description">${r.description}</p>
         <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
         <a class="map-link" href="${r.maps}" target="_blank" rel="noopener">[ Google Maps ]</a>
       `;
 
       document.getElementById('dateDisplay').textContent = getTodayStr();
+      renderHpBar();
+    }
 
-      const hunger = 50 + Math.floor(seededRandom(getDateSeed() + 99) * 50);
-      document.getElementById('hungerBar').style.width = hunger + '%';
+    // 下班倒计时血条
+    function renderHpBar() {
+      const jst = getJST();
+      const day = jst.getUTCDay();
+      const hpBar = document.getElementById('hpBar');
 
+      // 周日
+      if (day === 0) {
+        hpBar.innerHTML = `<span class="sunday-msg">[ REST DAY ] 今天不上班</span>`;
+        return;
+      }
+
+      // 工作日19:30 / 周六17:30
+      const offHour = day === 6 ? 17 : 19;
+      const offMin = 30;
+      const nowH = jst.getUTCHours();
+      const nowM = jst.getUTCMinutes();
+      const nowTotal = nowH * 60 + nowM;
+      const offTotal = offHour * 60 + offMin;
+      const workStart = 9 * 60; // 9:00开始算
+
+      let label, pct, color;
+      if (nowTotal >= offTotal) {
+        label = `已下班 (${offHour}:${String(offMin).padStart(2,'0')})`;
+        pct = 100;
+        color = '#44ff44';
+      } else if (nowTotal < workStart) {
+        label = `还没上班 → ${offHour}:${String(offMin).padStart(2,'0')}下班`;
+        pct = 0;
+        color = '#666';
+      } else {
+        const remaining = offTotal - nowTotal;
+        const h = Math.floor(remaining / 60);
+        const m = remaining % 60;
+        label = `距下班 ${h > 0 ? h + 'h' : ''}${m}m → ${offHour}:${String(offMin).padStart(2,'0')}`;
+        pct = Math.min(100, ((nowTotal - workStart) / (offTotal - workStart)) * 100);
+        color = pct > 80 ? '#44ff44' : pct > 50 ? '#ffcc00' : '#ff4444';
+      }
+
+      hpBar.innerHTML = `
+        <span class="label" style="color:${color};">WORK</span>
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
+        <span class="bar-text">${label}</span>
+      `;
     }
 
     function getCategories() {
@@ -839,7 +915,7 @@
           <div class="restaurant-item" onmouseenter="focusMarker(${restaurants.indexOf(r)})">
             <div class="info">
               <h4>${r.name}</h4>
-              <span>${r.address}</span>
+              <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
               <span class="tag">${r.category}</span>
@@ -958,6 +1034,8 @@
     renderList();
     initMap();
     highlightOnMap(currentPickIdx);
+    // 每分钟更新下班倒计时
+    setInterval(renderHpBar, 60000);
   </script>
 </body>
 </html>
