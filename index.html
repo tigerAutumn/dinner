@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今晩何食べる？- 長居・あびこ周辺</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DotGothic16', monospace;
+      background: #0f0f23;
+      color: #cccccc;
+      min-height: 100vh;
+      image-rendering: pixelated;
+    }
+
+    .pixel-border {
+      border: 4px solid;
+      box-shadow:
+        4px 0 0 0 #555,
+        -4px 0 0 0 #555,
+        0 4px 0 0 #555,
+        0 -4px 0 0 #555,
+        4px 4px 0 0 #333,
+        -4px -4px 0 0 #777,
+        4px -4px 0 0 #555,
+        -4px 4px 0 0 #555;
+      border-color: #555;
+    }
+
+    .pixel-border-gold {
+      border: 4px solid;
+      box-shadow:
+        4px 0 0 0 #e0a030,
+        -4px 0 0 0 #e0a030,
+        0 4px 0 0 #e0a030,
+        0 -4px 0 0 #e0a030,
+        4px 4px 0 0 #b07820,
+        -4px -4px 0 0 #ffcc44,
+        4px -4px 0 0 #e0a030,
+        -4px 4px 0 0 #e0a030;
+      border-color: #e0a030;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #ffcc00;
+      text-shadow: 2px 2px 0 #b07820, 4px 4px 0 #0f0f23;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      color: #666;
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .date-display {
+      color: #44ff44;
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .hp-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+      font-size: 0.7rem;
+    }
+
+    .hp-bar .label { color: #ff4444; }
+    .hp-bar .bar-bg {
+      width: 120px;
+      height: 12px;
+      background: #333;
+      border: 2px solid #555;
+    }
+    .hp-bar .bar-fill {
+      height: 100%;
+      background: #ff4444;
+      transition: width 0.5s;
+    }
+
+    .card {
+      background: #1a1a2e;
+      padding: 1.5rem;
+      margin: 1.5rem auto;
+      max-width: 480px;
+      width: calc(100% - 2rem);
+      text-align: center;
+    }
+
+    .card .category {
+      display: inline-block;
+      background: #442222;
+      color: #ff6666;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      margin-bottom: 0.8rem;
+      border: 2px solid #ff6666;
+    }
+
+    .card .area-tag {
+      display: inline-block;
+      background: #224422;
+      color: #66ff66;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.65rem;
+      margin-bottom: 0.8rem;
+      margin-left: 0.3rem;
+      border: 2px solid #66ff66;
+    }
+
+    .card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #333;
+    }
+
+    .card .address {
+      color: #666;
+      font-size: 0.7rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card .description {
+      color: #999;
+      font-size: 0.75rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .card .map-link {
+      display: inline-block;
+      background: #224488;
+      color: #66aaff;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-family: 'DotGothic16', monospace;
+      border: 2px solid #66aaff;
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+
+    .card .map-link:hover {
+      background: #66aaff;
+      color: #0f0f23;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin: 0 1rem 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #1a1a2e;
+      color: #cccccc;
+      border: 3px solid #555;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-family: 'DotGothic16', monospace;
+      transition: all 0.1s;
+    }
+
+    .btn:hover {
+      border-color: #ffcc00;
+      color: #ffcc00;
+      transform: translate(-2px, -2px);
+      box-shadow: 2px 2px 0 #ffcc00;
+    }
+
+    .btn:active {
+      transform: translate(0, 0);
+      box-shadow: none;
+    }
+
+    .btn.active {
+      border-color: #ffcc00;
+      color: #ffcc00;
+      background: #2a2a10;
+    }
+
+    /* 地图区域 - 大幅加大 */
+    .map-section {
+      width: calc(100% - 2rem);
+      max-width: 720px;
+      margin: 0 auto 2rem;
+    }
+
+    .map-section h3 {
+      font-size: 0.85rem;
+      color: #66aaff;
+      margin-bottom: 0.8rem;
+      text-align: center;
+      text-shadow: 1px 1px 0 #224488;
+    }
+
+    .map-section h3::before { content: "> "; color: #ffcc00; }
+
+    #mapContainer {
+      width: 100%;
+      height: 65vh;
+      min-height: 420px;
+      max-height: 600px;
+      border: 3px solid #555;
+      background: #1a1a2e;
+    }
+
+    .leaflet-container {
+      font-family: 'DotGothic16', monospace;
+      background: #1a1a2e;
+    }
+
+    .pixel-popup .leaflet-popup-content-wrapper {
+      background: #1a1a2e;
+      color: #cccccc;
+      border: 3px solid #ffcc00;
+      border-radius: 0;
+      font-family: 'DotGothic16', monospace;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+    }
+
+    .pixel-popup .leaflet-popup-tip { background: #ffcc00; }
+
+    .pixel-popup .leaflet-popup-content {
+      margin: 8px 12px;
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+
+    .pixel-popup .popup-name {
+      color: #ffcc00;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .pixel-popup .popup-cat { color: #ff6666; font-size: 0.7rem; }
+
+    .pixel-popup .popup-link {
+      display: inline-block;
+      margin-top: 6px;
+      color: #66aaff;
+      font-size: 0.7rem;
+      text-decoration: none;
+      border-bottom: 1px dashed #66aaff;
+    }
+
+    .pixel-popup .popup-link:hover { color: #ffffff; }
+
+    .pixel-popup .leaflet-popup-close-button {
+      color: #ff6666;
+      font-size: 18px;
+    }
+
+    .map-legend {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+      font-size: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .map-legend span { color: #888; }
+    .map-legend .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 3px;
+      vertical-align: middle;
+      border: 1px solid #333;
+    }
+
+    .history-section {
+      max-width: 480px;
+      width: calc(100% - 2rem);
+      margin: 0 auto 2rem;
+    }
+
+    .history-section h3 {
+      font-size: 0.85rem;
+      color: #ff6666;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .history-section h3::before { content: "> "; color: #ffcc00; }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px dashed #333;
+      font-size: 0.75rem;
+    }
+
+    .history-item .date { color: #666; }
+    .history-item .name { color: #cccccc; }
+
+    .list-section {
+      max-width: 720px;
+      width: calc(100% - 2rem);
+      margin: 0 auto 3rem;
+    }
+
+    .list-section h3 {
+      font-size: 0.85rem;
+      color: #66ff66;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .list-section h3::before { content: "> "; color: #ffcc00; }
+
+    .filter-bar {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .filter-btn {
+      background: transparent;
+      color: #666;
+      border: 2px solid #333;
+      padding: 0.2rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.65rem;
+      font-family: 'DotGothic16', monospace;
+      transition: all 0.1s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      border-color: #66ff66;
+      color: #66ff66;
+    }
+
+    .restaurant-list-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
+    @media (min-width: 540px) {
+      .restaurant-list-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .restaurant-item {
+      background: #1a1a2e;
+      border: 2px solid #333;
+      padding: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+
+    .restaurant-item:hover {
+      border-color: #ffcc00;
+      transform: translate(-2px, -2px);
+      box-shadow: 2px 2px 0 #ffcc00;
+    }
+
+    .restaurant-item .info h4 {
+      font-size: 0.8rem;
+      margin-bottom: 0.2rem;
+      color: #ffffff;
+    }
+
+    .restaurant-item .info span {
+      font-size: 0.6rem;
+      color: #666;
+    }
+
+    .restaurant-item .tag {
+      font-size: 0.55rem;
+      color: #ff6666;
+      border: 1px solid #ff6666;
+      padding: 0.15rem 0.4rem;
+      white-space: nowrap;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .cursor-blink::after {
+      content: '_';
+      animation: blink 1s infinite;
+      color: #ffcc00;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.05) 2px,
+        rgba(0,0,0,0.05) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f0f23; }
+    ::-webkit-scrollbar-thumb { background: #555; border: 2px solid #0f0f23; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>今晩何食べる？</h1>
+    <p>長居駅・あびこ駅 周辺500m</p>
+    <div class="date-display cursor-blink" id="dateDisplay"></div>
+    <div class="hp-bar">
+      <span class="label">HUNGER</span>
+      <div class="bar-bg"><div class="bar-fill" id="hungerBar" style="width:85%"></div></div>
+    </div>
+  </header>
+
+  <div class="card pixel-border-gold" id="mainCard">
+    <div id="cardContent"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="rerollBtn" onclick="reroll()">[ 換一家 ]</button>
+    <button class="btn" id="historyBtn" onclick="toggleHistory()">[ 履歴 ]</button>
+  </div>
+
+  <div class="map-section">
+    <h3>MAP</h3>
+    <div id="mapContainer" class="pixel-border"></div>
+    <div class="map-legend">
+      <span><span class="dot" style="background:#ff4444;"></span>長居エリア</span>
+      <span><span class="dot" style="background:#44aaff;"></span>あびこエリア</span>
+      <span><span class="dot" style="background:#ffcc00;border-color:#ffcc00;"></span>今日のおすすめ</span>
+    </div>
+  </div>
+
+  <div class="history-section" id="historySection" style="display:none;">
+    <h3>最近7日の推薦</h3>
+    <div id="historyList"></div>
+  </div>
+
+  <div class="list-section">
+    <h3>全店舗リスト（<span id="totalCount"></span>件）</h3>
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="restaurant-list-grid" id="restaurantList"></div>
+  </div>
+
+  <script>
+    const restaurants = [
+      // ============ 長居駅エリア ============
+      {
+        name: "又三郎",
+        category: "焼肉",
+        area: "長居",
+        address: "住吉区長居東4-8-5",
+        description: "食べログ百名店の熟成肉焼肉。黒毛和牛と熟成肉ステーキが絶品。",
+        maps: "https://maps.google.com/?q=又三郎+大阪市住吉区長居",
+        lat: 34.6118, lng: 135.5228
+      },
+      {
+        name: "ホルモン本舗 長居店",
+        category: "焼肉",
+        area: "長居",
+        address: "住吉区長居東3丁目",
+        description: "新鮮ホルモンが自慢の焼肉店。長居駅徒歩2分。",
+        maps: "https://maps.google.com/?q=ホルモン本舗+長居店",
+        lat: 34.6108, lng: 135.5198
+      },
+      {
+        name: "大松 長居店",
+        category: "焼肉",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "大衆焼肉ホルモン。全50品以上の豊富なメニュー。長居駅徒歩1分。",
+        maps: "https://maps.google.com/?q=大衆焼肉ホルモン+大松+長居店",
+        lat: 34.6113, lng: 135.5210
+      },
+      {
+        name: "中華蕎麦 丸蔵",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居東4-15-33",
+        description: "横浜の名店で修業。化学調味料不使用の中華そば。10席のみの人気店。",
+        maps: "https://maps.google.com/?q=中華蕎麦+丸蔵+長居",
+        lat: 34.6110, lng: 135.5220
+      },
+      {
+        name: "ラーメン男塾 長居店",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "がっつり系ラーメン。ボリューム重視の一杯。",
+        maps: "https://maps.google.com/?q=ラーメン男塾+長居店",
+        lat: 34.6115, lng: 135.5215
+      },
+      {
+        name: "札幌ラーメン みそ吟 長居公園店",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居公園付近",
+        description: "本格札幌味噌ラーメン。濃厚味噌スープが寒い日にぴったり。",
+        maps: "https://maps.google.com/?q=みそ吟+長居公園店",
+        lat: 34.6130, lng: 135.5190
+      },
+      {
+        name: "中華そば かみなり雲呑",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居東付近",
+        description: "ラーメンOSAKA百名店2025選出。肉ワンタン・海老ワンタンが絶品。食べログ3.68。",
+        maps: "https://maps.google.com/?q=中華そば+かみなり雲呑+長居",
+        lat: 34.6105, lng: 135.5225
+      },
+      {
+        name: "CoCo壱番屋 長居公園前店",
+        category: "カレー",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "安定のココイチ。トッピング自由で好みのカレーが楽しめる。",
+        maps: "https://maps.google.com/?q=CoCo壱番屋+長居公園前店",
+        lat: 34.6120, lng: 135.5205
+      },
+      {
+        name: "創作うどん ほしの",
+        category: "うどん・そば",
+        area: "長居",
+        address: "住吉区長居東",
+        description: "香川県善通寺のうどんを長居で。50種以上のメニュー。カレーうどんが人気。",
+        maps: "https://maps.google.com/?q=創作うどん+ほしの+長居",
+        lat: 34.6125, lng: 135.5202
+      },
+      {
+        name: "釜揚げうどん 一心",
+        category: "うどん・そば",
+        area: "長居",
+        address: "住吉区長居東付近",
+        description: "打ち立て釜揚げうどん専門店。開店から行列必至。麺切れ次第閉店（13時頃）。",
+        maps: "https://maps.google.com/?q=釜揚げうどん+一心+長居",
+        lat: 34.6112, lng: 135.5212
+      },
+      {
+        name: "不二屋",
+        category: "うどん・そば",
+        area: "長居",
+        address: "住吉区長居付近",
+        description: "かすカレーうどんの名店。メディア出演多数。濃厚カレーとかす（油揚げ）が絶妙。",
+        maps: "https://maps.google.com/?q=不二屋+長居+うどん",
+        lat: 34.6108, lng: 135.5195
+      },
+      {
+        name: "吉野家 長居店",
+        category: "定食・丼",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "早い・安い・うまい。牛丼の定番チェーン。",
+        maps: "https://maps.google.com/?q=吉野家+長居店+大阪",
+        lat: 34.6117, lng: 135.5208
+      },
+      {
+        name: "宮本むなし 長居店",
+        category: "定食・丼",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "ボリューム満点の定食屋。ご飯おかわり自由が嬉しい。",
+        maps: "https://maps.google.com/?q=宮本むなし+長居店",
+        lat: 34.6114, lng: 135.5218
+      },
+      {
+        name: "くしよし 本店",
+        category: "串揚げ",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "あびこ筋沿いの人気串揚げ店。サクサクの串カツが美味しい。",
+        maps: "https://maps.google.com/?q=くしよし+本店+長居",
+        lat: 34.6122, lng: 135.5222
+      },
+      {
+        name: "くら寿司 長居店",
+        category: "寿司",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "回転寿司チェーン。ネタの鮮度とコスパが魅力。",
+        maps: "https://maps.google.com/?q=くら寿司+長居店",
+        lat: 34.6102, lng: 135.5220
+      },
+      {
+        name: "ハンバーグレストランBOSTON 長居店",
+        category: "洋食",
+        area: "長居",
+        address: "住吉区長居東4-6-15",
+        description: "1952年創業の大阪名物ハンバーグ。長居公園向かい。ランチ・ディナー営業。",
+        maps: "https://maps.google.com/?q=ハンバーグレストランBOSTON+長居店",
+        lat: 34.6119, lng: 135.5200
+      },
+      {
+        name: "とんかつ本田",
+        category: "とんかつ",
+        area: "長居",
+        address: "住吉区長居2-12-10",
+        description: "JR長居駅西口徒歩3分の人気とんかつ店。ランチ時は満席になることも。",
+        maps: "https://maps.google.com/?q=とんかつ本田+長居",
+        lat: 34.6123, lng: 135.5178
+      },
+      {
+        name: "浪花屋",
+        category: "たこ焼き",
+        area: "長居",
+        address: "住吉区長居東4-6-8",
+        description: "ミシュランビブグルマン3年連続掲載。フンワリ＆トロ～リたこ焼き。創業37年。",
+        maps: "https://maps.google.com/?q=浪花屋+たこ焼き+長居",
+        lat: 34.6116, lng: 135.5200
+      },
+      {
+        name: "百十 我孫子筋店",
+        category: "お好み焼き",
+        area: "長居",
+        address: "住吉区長居付近",
+        description: "長年愛されるお好み焼き・もんじゃ焼き店。地元民に人気。",
+        maps: "https://maps.google.com/?q=百十+我孫子筋店+長居",
+        lat: 34.6107, lng: 135.5207
+      },
+      {
+        name: "ケンタッキー 長居店",
+        category: "ファストフード",
+        area: "長居",
+        address: "住吉区長居東4丁目",
+        description: "オリジナルチキンが食べたい日に。セットメニューも充実。",
+        maps: "https://maps.google.com/?q=ケンタッキー+長居店+大阪",
+        lat: 34.6121, lng: 135.5216
+      },
+      {
+        name: "パリーネ 長居店",
+        category: "パン・カフェ",
+        area: "長居",
+        address: "住吉区長居東3-1-29",
+        description: "手作りパン屋。具とクリームは全て自家製。イートインも可能。長居駅徒歩3分。",
+        maps: "https://maps.google.com/?q=パリーネ+長居店",
+        lat: 34.6105, lng: 135.5193
+      },
+      {
+        name: "cafe glue",
+        category: "パン・カフェ",
+        area: "長居",
+        address: "住吉区長居公園南付近",
+        description: "長居公園すぐの隠れ家カフェ。手作りケーキとロコモコ・ワンプレートランチ。",
+        maps: "https://maps.google.com/?q=cafe+glue+長居",
+        lat: 34.6128, lng: 135.5185
+      },
+      {
+        name: "ミスタードーナツ 長居公園駅前店",
+        category: "パン・カフェ",
+        area: "長居",
+        address: "住吉区長居公園駅前",
+        description: "ドーナツと軽食。ちょっとした夜食にも。",
+        maps: "https://maps.google.com/?q=ミスタードーナツ+長居公園駅前",
+        lat: 34.6126, lng: 135.5195
+      },
+      {
+        name: "YANMAR MARCHÉ NAGAI",
+        category: "フードコート",
+        area: "長居",
+        address: "東住吉区長居公園1-1",
+        description: "長居公園内のフードコート。新鮮野菜にこだわったメニュー。テラス席あり。",
+        maps: "https://maps.google.com/?q=YANMAR+MARCHE+NAGAI",
+        lat: 34.6145, lng: 135.5180
+      },
+      {
+        name: "わっしょい MECHA 長居公園",
+        category: "ラーメン",
+        area: "長居",
+        address: "東住吉区長居公園付近",
+        description: "濃厚豚骨ラーメンの人気グループ。オリジナルカレーもあり。",
+        maps: "https://maps.google.com/?q=わっしょい+MECHA+長居公園",
+        lat: 34.6140, lng: 135.5185
+      },
+      // ============ あびこ駅エリア ============
+      {
+        name: "釈迦力 友 あびこ店",
+        category: "ラーメン",
+        area: "あびこ",
+        address: "住吉区我孫子東2丁目",
+        description: "あびこ駅徒歩2分のラーメン店。こってり系が人気。",
+        maps: "https://maps.google.com/?q=釈迦力+友+あびこ店",
+        lat: 34.6048, lng: 135.5198
+      },
+      {
+        name: "中華そば 閃",
+        category: "ラーメン",
+        area: "あびこ",
+        address: "住吉区我孫子付近",
+        description: "あっさり系の中華そばが評判。食べログ高評価。",
+        maps: "https://maps.google.com/?q=中華そば+閃+あびこ",
+        lat: 34.6055, lng: 135.5185
+      },
+      {
+        name: "中華そば かみなり",
+        category: "ラーメン",
+        area: "あびこ",
+        address: "住吉区我孫子付近",
+        description: "百名店の姉妹店。丁寧に作られた中華そばが評判。",
+        maps: "https://maps.google.com/?q=中華そば+かみなり+あびこ+大阪",
+        lat: 34.6052, lng: 135.5172
+      },
+      {
+        name: "ガンジス 我孫子店",
+        category: "カレー",
+        area: "あびこ",
+        address: "住吉区我孫子3丁目",
+        description: "本場インドカレーとタンドリー料理。あびこ駅徒歩3分。ナンが美味しい。",
+        maps: "https://maps.google.com/?q=ガンジス+我孫子店+大阪",
+        lat: 34.6045, lng: 135.5205
+      },
+      {
+        name: "ラマイ 大阪あびこ店",
+        category: "カレー",
+        area: "あびこ",
+        address: "住吉区苅田7-12-5",
+        description: "北海道百名店のスープカレー。バリ生まれ札幌育ちの味が大阪へ。あびこ駅徒歩1分。",
+        maps: "https://maps.google.com/?q=アジアンバーラマイ+大阪あびこ店",
+        lat: 34.6058, lng: 135.5192
+      },
+      {
+        name: "炭火焼鳥 とこ葉 あびこ店",
+        category: "焼鳥",
+        area: "あびこ",
+        address: "住吉区我孫子3丁目",
+        description: "絶品伊勢赤鶏の焼鳥。こだわりの串焼きが堪能できる。",
+        maps: "https://maps.google.com/?q=炭火焼鳥+とこ葉+あびこ店",
+        lat: 34.6042, lng: 135.5200
+      },
+      {
+        name: "肉匠 牛虎 あびこ",
+        category: "焼肉",
+        area: "あびこ",
+        address: "住吉区我孫子付近",
+        description: "精肉店直営。黒毛和牛をリーズナブルに。食べ放題プランもあり。",
+        maps: "https://maps.google.com/?q=肉匠+牛虎+あびこ",
+        lat: 34.6038, lng: 135.5188
+      },
+      {
+        name: "pipi aina",
+        category: "焼肉",
+        area: "あびこ",
+        address: "住吉区我孫子3-5-20",
+        description: "焼肉レストラン。ランチ11:00-15:00、ディナー17:00-23:00。",
+        maps: "https://maps.google.com/?q=pipi+aina+我孫子+大阪",
+        lat: 34.6040, lng: 135.5202
+      },
+      {
+        name: "肉のオカヤマ直売所",
+        category: "焼肉",
+        area: "あびこ",
+        address: "住吉区苅田付近",
+        description: "精肉店直営BBQ。好きなお肉を買ってその場で焼ける。揚げ物テイクアウトも充実。",
+        maps: "https://maps.google.com/?q=肉のオカヤマ直売所+あびこ",
+        lat: 34.6062, lng: 135.5180
+      },
+      {
+        name: "松屋 あびこ店",
+        category: "定食・丼",
+        area: "あびこ",
+        address: "住吉区我孫子東2丁目",
+        description: "牛めし・カレー・定食。リーズナブルで深夜まで営業。",
+        maps: "https://maps.google.com/?q=松屋+あびこ店+大阪",
+        lat: 34.6050, lng: 135.5195
+      },
+      {
+        name: "咖喱饂飩 たちばな",
+        category: "うどん・そば",
+        area: "あびこ",
+        address: "住吉区我孫子付近",
+        description: "石鍋カレーうどん専門店。濃厚なカレーとモチモチのうどんが絶妙。",
+        maps: "https://maps.google.com/?q=咖喱饂飩+たちばな+あびこ",
+        lat: 34.6056, lng: 135.5178
+      },
+      {
+        name: "双琉",
+        category: "中華",
+        area: "あびこ",
+        address: "住吉区我孫子付近",
+        description: "本場四川の豆板醤を使った麻婆豆腐が人気の中華料理店。あびこ駅徒歩5分。",
+        maps: "https://maps.google.com/?q=中国小菜+双琉+あびこ",
+        lat: 34.6044, lng: 135.5175
+      },
+      {
+        name: "串揚げ あとわ あびこ店",
+        category: "串揚げ",
+        area: "あびこ",
+        address: "住吉区苅田付近",
+        description: "あびこ駅徒歩1分。串揚げ8本御膳1500円。揚げたてサクサクの串揚げ。",
+        maps: "https://maps.google.com/?q=串揚げ+あとわ+あびこ店",
+        lat: 34.6053, lng: 135.5190
+      },
+      {
+        name: "すえ広",
+        category: "とんかつ",
+        area: "あびこ",
+        address: "住吉区苅田3-14-14",
+        description: "地元で長く愛されるかつ料理店。蓋が閉まらないかつ重が名物。玄米とろろ定食も。",
+        maps: "https://maps.google.com/?q=すえ広+とんかつ+あびこ",
+        lat: 34.6060, lng: 135.5170
+      }
+    ];
+
+    // 根据日期生成伪随机数
+    function seededRandom(seed) {
+      let x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    }
+
+    function getDateSeed() {
+      const now = new Date();
+      const jst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      return jst.getUTCFullYear() * 10000 + (jst.getUTCMonth() + 1) * 100 + jst.getUTCDate();
+    }
+
+    function getTodayStr() {
+      const now = new Date();
+      const jst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      const y = jst.getUTCFullYear();
+      const m = String(jst.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(jst.getUTCDate()).padStart(2, '0');
+      const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+      const w = weekdays[jst.getUTCDay()];
+      return `${y}年${m}月${d}日（${w}）`;
+    }
+
+    function getDailyPick(offset = 0) {
+      const seed = getDateSeed() + offset;
+      return Math.floor(seededRandom(seed) * restaurants.length);
+    }
+
+    let rerollCount = 0;
+    let currentPickIdx = 0;
+    let map = null;
+    let markers = [];
+    let highlightMarker = null;
+
+    function renderCard() {
+      currentPickIdx = getDailyPick(rerollCount);
+      const r = restaurants[currentPickIdx];
+      saveToHistory(r.name);
+
+      document.getElementById('cardContent').innerHTML = `
+        <span class="category">${r.category}</span>
+        <span class="area-tag">${r.area}エリア</span>
+        <h2>${r.name}</h2>
+        <p class="address">${r.address}</p>
+        <p class="description">${r.description}</p>
+        <a class="map-link" href="${r.maps}" target="_blank" rel="noopener">[ Google Maps ]</a>
+      `;
+
+      document.getElementById('dateDisplay').textContent = getTodayStr();
+
+      const hunger = 50 + Math.floor(seededRandom(getDateSeed() + rerollCount + 99) * 50);
+      document.getElementById('hungerBar').style.width = hunger + '%';
+
+      highlightOnMap(currentPickIdx);
+    }
+
+    function reroll() {
+      rerollCount++;
+      renderCard();
+      const card = document.getElementById('mainCard');
+      card.style.transform = 'scale(0.95)';
+      card.style.opacity = '0.7';
+      setTimeout(() => {
+        card.style.transform = 'scale(1)';
+        card.style.opacity = '1';
+      }, 150);
+    }
+
+    function saveToHistory(name) {
+      const today = getTodayStr();
+      let history = JSON.parse(localStorage.getItem('dinnerHistory') || '[]');
+      history = history.filter(h => h.date !== today);
+      history.unshift({ date: today, name: name });
+      history = history.slice(0, 7);
+      localStorage.setItem('dinnerHistory', JSON.stringify(history));
+    }
+
+    function toggleHistory() {
+      const section = document.getElementById('historySection');
+      const btn = document.getElementById('historyBtn');
+      if (section.style.display === 'none') {
+        section.style.display = 'block';
+        btn.classList.add('active');
+        renderHistory();
+      } else {
+        section.style.display = 'none';
+        btn.classList.remove('active');
+      }
+    }
+
+    function renderHistory() {
+      const history = JSON.parse(localStorage.getItem('dinnerHistory') || '[]');
+      const list = document.getElementById('historyList');
+      if (history.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:#666;font-size:0.75rem;">まだ履歴がありません</p>';
+        return;
+      }
+      list.innerHTML = history.map(h => `
+        <div class="history-item">
+          <span class="date">${h.date}</span>
+          <span class="name">${h.name}</span>
+        </div>
+      `).join('');
+    }
+
+    function getCategories() {
+      return [...new Set(restaurants.map(r => r.category))];
+    }
+
+    let activeFilter = null;
+
+    function renderFilters() {
+      const bar = document.getElementById('filterBar');
+      const cats = getCategories();
+      bar.innerHTML = `<button class="filter-btn active" onclick="filterBy(null, this)">すべて</button>` +
+        cats.map(c => `<button class="filter-btn" onclick="filterBy('${c}', this)">${c}</button>`).join('');
+    }
+
+    function filterBy(category, btn) {
+      activeFilter = category;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderList();
+    }
+
+    function renderList() {
+      const list = document.getElementById('restaurantList');
+      const filtered = activeFilter
+        ? restaurants.filter(r => r.category === activeFilter)
+        : restaurants;
+
+      document.getElementById('totalCount').textContent = filtered.length;
+
+      list.innerHTML = filtered.map((r, i) => `
+        <a href="${r.maps}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="restaurant-item" onmouseenter="focusMarker(${restaurants.indexOf(r)})">
+            <div class="info">
+              <h4>${r.name}</h4>
+              <span>${r.area} / ${r.address}</span>
+            </div>
+            <span class="tag">${r.category}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    // === 地图 ===
+    function createPixelIcon(color, size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const px = Math.floor(size / 8);
+      const cx = Math.floor(size / 2);
+      const cy = Math.floor(size / 2);
+
+      ctx.fillStyle = color;
+      ctx.fillRect(cx - px, cy - px, px * 2, px * 2);
+      ctx.fillRect(cx - px, cy - px * 3, px * 2, px * 2);
+      ctx.fillRect(cx - px, cy + px, px * 2, px * 2);
+      ctx.fillRect(cx - px * 3, cy - px, px * 2, px * 2);
+      ctx.fillRect(cx + px, cy - px, px * 2, px * 2);
+
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(cx - px, cy - px, px * 2, px * 2);
+
+      return L.icon({
+        iconUrl: canvas.toDataURL(),
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
+        popupAnchor: [0, -size / 2]
+      });
+    }
+
+    function initMap() {
+      map = L.map('mapContainer', {
+        zoomControl: true,
+        attributionControl: false
+      }).setView([34.6085, 135.5195], 15);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      const nagaiIcon = createPixelIcon('#ff4444', 24);
+      const abikoIcon = createPixelIcon('#44aaff', 24);
+
+      restaurants.forEach((r, i) => {
+        const icon = r.area === '長居' ? nagaiIcon : abikoIcon;
+        const marker = L.marker([r.lat, r.lng], { icon: icon }).addTo(map);
+
+        marker.bindPopup(`
+          <div class="popup-name">${r.name}</div>
+          <div class="popup-cat">${r.category} / ${r.area}</div>
+          <div style="color:#999;font-size:0.65rem;margin-top:2px;">${r.description}</div>
+          <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
+        `, { className: 'pixel-popup', maxWidth: 250 });
+
+        markers.push(marker);
+      });
+
+      // 显示所有标记的范围
+      const group = new L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+    }
+
+    function highlightOnMap(idx) {
+      if (!map) return;
+      const r = restaurants[idx];
+
+      if (highlightMarker) {
+        map.removeLayer(highlightMarker);
+      }
+
+      const goldIcon = createPixelIcon('#ffcc00', 32);
+      highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
+      highlightMarker.bindPopup(`
+        <div class="popup-name">TODAY >> ${r.name}</div>
+        <div class="popup-cat">${r.category} / ${r.area}</div>
+        <div style="color:#999;font-size:0.65rem;margin-top:2px;">${r.description}</div>
+        <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
+      `, { className: 'pixel-popup', maxWidth: 250 }).openPopup();
+    }
+
+    // 鼠标悬停列表项时在地图上显示对应的popup
+    function focusMarker(idx) {
+      if (!map || !markers[idx]) return;
+      markers[idx].openPopup();
+      map.setView([restaurants[idx].lat, restaurants[idx].lng], 16, { animate: true });
+    }
+
+    // 初始化
+    renderCard();
+    renderFilters();
+    renderList();
+    initMap();
+  </script>
+</body>
+</html>
