@@ -456,6 +456,7 @@
     <h3>MAP</h3>
     <div id="mapContainer" class="pixel-border"></div>
     <div class="map-legend">
+      <span><span class="dot" style="background:#66ff66;"></span>公司</span>
       <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
       <span><span class="dot" style="background:#ffcc00;border-color:#ffcc00;"></span>今日推荐</span>
     </div>
@@ -1019,8 +1020,17 @@
         markers.push(marker);
       });
 
+      // 公司标记
+      const companyIcon = createPixelIcon('#66ff66', 28);
+      const companyMarker = L.marker([34.6092340, 135.5132900], { icon: companyIcon, zIndexOffset: 500 }).addTo(map);
+      companyMarker.bindPopup(`
+        <div class="popup-name">公司</div>
+        <div style="color:#999;font-size:0.65rem;">住吉区長居東4-11-25 タケ＆ハルビル第1</div>
+      `, { className: 'pixel-popup' });
+
       // 显示所有标记的范围
-      const group = new L.featureGroup(markers);
+      const allMarkers = [...markers, companyMarker];
+      const group = new L.featureGroup(allMarkers);
       map.fitBounds(group.getBounds().pad(0.1));
     }
 
