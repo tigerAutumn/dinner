@@ -474,160 +474,44 @@
   </div>
 
   <script>
+    // 坐标来源：OSM Overpass API实测 + Mapion + 地址推算
     const restaurants = [
-      // ============ 長居駅エリア ============
-      {
-        name: "又三郎",
-        category: "焼肉",
-        area: "長居",
-        address: "住吉区長居東4-8-5",
-        description: "食べログ百名店の熟成肉焼肉。黒毛和牛と熟成肉ステーキが絶品。",
-        maps: "https://maps.google.com/?q=又三郎+大阪市住吉区長居",
-        lat: 34.6118, lng: 135.5228
-      },
-      {
-        name: "ホルモン本舗 長居店",
-        category: "焼肉",
-        area: "長居",
-        address: "住吉区長居東3丁目",
-        description: "新鮮ホルモンが自慢の焼肉店。長居駅徒歩2分。",
-        maps: "https://maps.google.com/?q=ホルモン本舗+長居店",
-        lat: 34.6108, lng: 135.5198
-      },
-      {
-        name: "大松 長居店",
-        category: "焼肉",
-        area: "長居",
-        address: "住吉区長居東4丁目",
-        description: "大衆焼肉ホルモン。全50品以上の豊富なメニュー。長居駅徒歩1分。",
-        maps: "https://maps.google.com/?q=大衆焼肉ホルモン+大松+長居店",
-        lat: 34.6113, lng: 135.5210
-      },
-      {
-        name: "中華蕎麦 丸蔵",
-        category: "ラーメン",
-        area: "長居",
-        address: "住吉区長居東4-15-33",
-        description: "横浜の名店で修業。化学調味料不使用の中華そば。10席のみの人気店。",
-        maps: "https://maps.google.com/?q=中華蕎麦+丸蔵+長居",
-        lat: 34.6110, lng: 135.5220
-      },
-      {
-        name: "ラーメン男塾 長居店",
-        category: "ラーメン",
-        area: "長居",
-        address: "住吉区長居東4丁目",
-        description: "がっつり系ラーメン。ボリューム重視の一杯。",
-        maps: "https://maps.google.com/?q=ラーメン男塾+長居店",
-        lat: 34.6115, lng: 135.5215
-      },
-      {
-        name: "札幌ラーメン みそ吟 長居公園店",
-        category: "ラーメン",
-        area: "長居",
-        address: "住吉区長居公園付近",
-        description: "本格札幌味噌ラーメン。濃厚味噌スープが寒い日にぴったり。",
-        maps: "https://maps.google.com/?q=みそ吟+長居公園店",
-        lat: 34.6130, lng: 135.5190
-      },
-      {
-        name: "中華そば かみなり雲呑",
-        category: "ラーメン",
-        area: "長居",
-        address: "住吉区長居東付近",
-        description: "ラーメンOSAKA百名店2025選出。肉ワンタン・海老ワンタンが絶品。食べログ3.68。",
-        maps: "https://maps.google.com/?q=中華そば+かみなり雲呑+長居",
-        lat: 34.6105, lng: 135.5225
-      },
+      // ============ 長居駅エリア - 長居東4丁目 ============
       {
         name: "CoCo壱番屋 長居公園前店",
         category: "カレー",
         area: "長居",
-        address: "住吉区長居東4丁目",
+        address: "住吉区長居東4-1-12",
         description: "安定のココイチ。トッピング自由で好みのカレーが楽しめる。",
         maps: "https://maps.google.com/?q=CoCo壱番屋+長居公園前店",
-        lat: 34.6120, lng: 135.5205
-      },
-      {
-        name: "創作うどん ほしの",
-        category: "うどん・そば",
-        area: "長居",
-        address: "住吉区長居東",
-        description: "香川県善通寺のうどんを長居で。50種以上のメニュー。カレーうどんが人気。",
-        maps: "https://maps.google.com/?q=創作うどん+ほしの+長居",
-        lat: 34.6125, lng: 135.5202
-      },
-      {
-        name: "釜揚げうどん 一心",
-        category: "うどん・そば",
-        area: "長居",
-        address: "住吉区長居東付近",
-        description: "打ち立て釜揚げうどん専門店。開店から行列必至。麺切れ次第閉店（13時頃）。",
-        maps: "https://maps.google.com/?q=釜揚げうどん+一心+長居",
-        lat: 34.6112, lng: 135.5212
-      },
-      {
-        name: "不二屋",
-        category: "うどん・そば",
-        area: "長居",
-        address: "住吉区長居付近",
-        description: "かすカレーうどんの名店。メディア出演多数。濃厚カレーとかす（油揚げ）が絶妙。",
-        maps: "https://maps.google.com/?q=不二屋+長居+うどん",
-        lat: 34.6108, lng: 135.5195
+        lat: 34.61197, lng: 135.51380 // OSM実測
       },
       {
         name: "吉野家 長居店",
         category: "定食・丼",
         area: "長居",
-        address: "住吉区長居東4丁目",
+        address: "住吉区長居東4-2-3",
         description: "早い・安い・うまい。牛丼の定番チェーン。",
         maps: "https://maps.google.com/?q=吉野家+長居店+大阪",
-        lat: 34.6117, lng: 135.5208
+        lat: 34.61137, lng: 135.51370 // OSM実測
       },
       {
-        name: "宮本むなし 長居店",
-        category: "定食・丼",
+        name: "大松 長居店",
+        category: "焼肉",
         area: "長居",
-        address: "住吉区長居東4丁目",
-        description: "ボリューム満点の定食屋。ご飯おかわり自由が嬉しい。",
-        maps: "https://maps.google.com/?q=宮本むなし+長居店",
-        lat: 34.6114, lng: 135.5218
+        address: "住吉区長居東4-2-7",
+        description: "大衆焼肉ホルモン。全50品以上の豊富なメニュー。長居駅徒歩1分。",
+        maps: "https://maps.google.com/?q=大衆焼肉ホルモン+大松+長居店",
+        lat: 34.61120, lng: 135.51385
       },
       {
-        name: "くしよし 本店",
-        category: "串揚げ",
+        name: "ケンタッキー 長居店",
+        category: "ファストフード",
         area: "長居",
-        address: "住吉区長居東4丁目",
-        description: "あびこ筋沿いの人気串揚げ店。サクサクの串カツが美味しい。",
-        maps: "https://maps.google.com/?q=くしよし+本店+長居",
-        lat: 34.6122, lng: 135.5222
-      },
-      {
-        name: "くら寿司 長居店",
-        category: "寿司",
-        area: "長居",
-        address: "住吉区長居東4丁目",
-        description: "回転寿司チェーン。ネタの鮮度とコスパが魅力。",
-        maps: "https://maps.google.com/?q=くら寿司+長居店",
-        lat: 34.6102, lng: 135.5220
-      },
-      {
-        name: "ハンバーグレストランBOSTON 長居店",
-        category: "洋食",
-        area: "長居",
-        address: "住吉区長居東4-6-15",
-        description: "1952年創業の大阪名物ハンバーグ。長居公園向かい。ランチ・ディナー営業。",
-        maps: "https://maps.google.com/?q=ハンバーグレストランBOSTON+長居店",
-        lat: 34.6119, lng: 135.5200
-      },
-      {
-        name: "とんかつ本田",
-        category: "とんかつ",
-        area: "長居",
-        address: "住吉区長居2-12-10",
-        description: "JR長居駅西口徒歩3分の人気とんかつ店。ランチ時は満席になることも。",
-        maps: "https://maps.google.com/?q=とんかつ本田+長居",
-        lat: 34.6123, lng: 135.5178
+        address: "住吉区長居東4-1-12",
+        description: "オリジナルチキンが食べたい日に。セットメニューも充実。",
+        maps: "https://maps.google.com/?q=ケンタッキー+長居店+大阪",
+        lat: 34.61177, lng: 135.51371 // OSM実測
       },
       {
         name: "浪花屋",
@@ -636,25 +520,53 @@
         address: "住吉区長居東4-6-8",
         description: "ミシュランビブグルマン3年連続掲載。フンワリ＆トロ～リたこ焼き。創業37年。",
         maps: "https://maps.google.com/?q=浪花屋+たこ焼き+長居",
-        lat: 34.6116, lng: 135.5200
+        lat: 34.60985, lng: 135.51360
       },
       {
-        name: "百十 我孫子筋店",
-        category: "お好み焼き",
+        name: "ハンバーグレストランBOSTON 長居店",
+        category: "洋食",
         area: "長居",
-        address: "住吉区長居付近",
-        description: "長年愛されるお好み焼き・もんじゃ焼き店。地元民に人気。",
-        maps: "https://maps.google.com/?q=百十+我孫子筋店+長居",
-        lat: 34.6107, lng: 135.5207
+        address: "住吉区長居東4-6-15",
+        description: "1952年創業の大阪名物ハンバーグ。長居公園向かい。ランチ・ディナー営業。",
+        maps: "https://maps.google.com/?q=ハンバーグレストランBOSTON+長居店",
+        lat: 34.60958, lng: 135.51347 // OSM実測
       },
       {
-        name: "ケンタッキー 長居店",
-        category: "ファストフード",
+        name: "ミスタードーナツ 長居ショップ",
+        category: "パン・カフェ",
         area: "長居",
-        address: "住吉区長居東4丁目",
-        description: "オリジナルチキンが食べたい日に。セットメニューも充実。",
-        maps: "https://maps.google.com/?q=ケンタッキー+長居店+大阪",
-        lat: 34.6121, lng: 135.5216
+        address: "住吉区長居東4-6-15",
+        description: "ドーナツと軽食。ちょっとした夜食にも。",
+        maps: "https://maps.google.com/?q=ミスタードーナツ+長居ショップ",
+        lat: 34.60975, lng: 135.51348 // OSM実測
+      },
+      {
+        name: "ラーメン男塾 長居店",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居東4-11-24",
+        description: "がっつり系ラーメン。ボリューム重視の一杯。",
+        maps: "https://maps.google.com/?q=ラーメン男塾+長居店",
+        lat: 34.60850, lng: 135.51370
+      },
+      {
+        name: "中華蕎麦 丸蔵",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居東4-15-33",
+        description: "横浜の名店で修業。化学調味料不使用の中華そば。10席のみの人気店。",
+        maps: "https://maps.google.com/?q=中華蕎麦+丸蔵+長居",
+        lat: 34.60750, lng: 135.51390
+      },
+      // ============ 長居東3丁目 ============
+      {
+        name: "創作うどん ほしの",
+        category: "うどん・そば",
+        area: "長居",
+        address: "住吉区長居東3-1-28",
+        description: "香川県善通寺のうどんを長居で。50種以上のメニュー。カレーうどんが人気。",
+        maps: "https://maps.google.com/?q=創作うどん+ほしの+長居",
+        lat: 34.60920, lng: 135.51340
       },
       {
         name: "パリーネ 長居店",
@@ -663,34 +575,108 @@
         address: "住吉区長居東3-1-29",
         description: "手作りパン屋。具とクリームは全て自家製。イートインも可能。長居駅徒歩3分。",
         maps: "https://maps.google.com/?q=パリーネ+長居店",
-        lat: 34.6105, lng: 135.5193
+        lat: 34.60910, lng: 135.51330
       },
       {
         name: "cafe glue",
         category: "パン・カフェ",
         area: "長居",
-        address: "住吉区長居公園南付近",
+        address: "住吉区長居東3-3-53",
         description: "長居公園すぐの隠れ家カフェ。手作りケーキとロコモコ・ワンプレートランチ。",
         maps: "https://maps.google.com/?q=cafe+glue+長居",
-        lat: 34.6128, lng: 135.5185
+        lat: 34.60880, lng: 135.51350
       },
       {
-        name: "ミスタードーナツ 長居公園駅前店",
-        category: "パン・カフェ",
+        name: "釜揚げうどん 一心",
+        category: "うどん・そば",
         area: "長居",
-        address: "住吉区長居公園駅前",
-        description: "ドーナツと軽食。ちょっとした夜食にも。",
-        maps: "https://maps.google.com/?q=ミスタードーナツ+長居公園駅前",
-        lat: 34.6126, lng: 135.5195
+        address: "住吉区長居東3-4-21",
+        description: "うどんWEST百名店2024。打ち立て釜揚げ専門。麺切れ次第閉店（13時頃）。",
+        maps: "https://maps.google.com/?q=釜揚げうどん+一心+長居",
+        lat: 34.60855, lng: 135.51370
       },
+      {
+        name: "咖喱饂飩 たちばな",
+        category: "うどん・そば",
+        area: "長居",
+        address: "住吉区長居東3-7-5",
+        description: "石鍋カレーうどん専門店。濃厚なカレーとモチモチのうどんが絶妙。",
+        maps: "https://maps.google.com/?q=咖喱饂飩+たちばな+長居",
+        lat: 34.60780, lng: 135.51380
+      },
+      {
+        name: "ホルモン本舗 長居店",
+        category: "焼肉",
+        area: "長居",
+        address: "住吉区長居東3-14-22",
+        description: "新鮮ホルモンが自慢の焼肉店。黒毛和牛の上肉を全品1078円で提供。",
+        maps: "https://maps.google.com/?q=ホルモン本舗+長居店",
+        lat: 34.60630, lng: 135.51375
+      },
+      {
+        name: "中華そば かみなり雲呑",
+        category: "ラーメン",
+        area: "長居",
+        address: "住吉区長居東3-14-22",
+        description: "ラーメンOSAKA百名店2025選出。肉ワンタン・海老ワンタンが絶品。食べログ3.68。",
+        maps: "https://maps.google.com/?q=中華そば+かみなり雲呑+長居",
+        lat: 34.60610, lng: 135.51370
+      },
+      {
+        name: "百十 我孫子筋店",
+        category: "お好み焼き",
+        area: "長居",
+        address: "住吉区長居東3-15-26",
+        description: "長年愛されるお好み焼き・もんじゃ焼き店。地元民に人気。",
+        maps: "https://maps.google.com/?q=百十+我孫子筋店+長居",
+        lat: 34.60573, lng: 135.51358 // OSM実測
+      },
+      // ============ 長居 西側（JR駅側） ============
+      {
+        name: "又三郎",
+        category: "焼肉",
+        area: "長居",
+        address: "住吉区長居2-13-13",
+        description: "食べログ百名店の熟成肉焼肉。黒毛和牛と熟成肉ステーキが絶品。",
+        maps: "https://maps.google.com/?q=又三郎+大阪市住吉区長居",
+        lat: 34.61170, lng: 135.51200
+      },
+      {
+        name: "とんかつ本田",
+        category: "とんかつ",
+        area: "長居",
+        address: "住吉区長居2-12-10",
+        description: "JR長居駅西口徒歩1分の人気とんかつ店。ランチ時は満席になることも。",
+        maps: "https://maps.google.com/?q=とんかつ本田+長居",
+        lat: 34.61192, lng: 135.51176 // Mapion実測
+      },
+      {
+        name: "くら寿司 長居店",
+        category: "寿司",
+        area: "長居",
+        address: "住吉区長居1-2-3",
+        description: "回転寿司チェーン。ネタの鮮度とコスパが魅力。駐車場57台。",
+        maps: "https://maps.google.com/?q=くら寿司+長居店",
+        lat: 34.61250, lng: 135.51000
+      },
+      {
+        name: "不二屋",
+        category: "うどん・そば",
+        area: "長居",
+        address: "住吉区長居西3-4-14",
+        description: "かすカレーうどんの名店。メディア出演多数。濃厚カレーとかす（油揚げ）が絶妙。",
+        maps: "https://maps.google.com/?q=不二屋+長居+うどん",
+        lat: 34.60950, lng: 135.50900
+      },
+      // ============ 長居公園・西田辺エリア ============
       {
         name: "YANMAR MARCHÉ NAGAI",
         category: "フードコート",
         area: "長居",
         address: "東住吉区長居公園1-1",
-        description: "長居公園内のフードコート。新鮮野菜にこだわったメニュー。テラス席あり。",
+        description: "長居公園入口のフードコート。新鮮野菜にこだわったメニュー。テラス席あり。",
         maps: "https://maps.google.com/?q=YANMAR+MARCHE+NAGAI",
-        lat: 34.6145, lng: 135.5180
+        lat: 34.60988, lng: 135.51522 // OSM実測
       },
       {
         name: "わっしょい MECHA 長居公園",
@@ -699,44 +685,53 @@
         address: "東住吉区長居公園付近",
         description: "濃厚豚骨ラーメンの人気グループ。オリジナルカレーもあり。",
         maps: "https://maps.google.com/?q=わっしょい+MECHA+長居公園",
-        lat: 34.6140, lng: 135.5185
+        lat: 34.60955, lng: 135.51580
       },
-      // ============ あびこ駅エリア ============
       {
-        name: "釈迦力 友 あびこ店",
+        name: "札幌ラーメン みそ吟 長居公園店",
         category: "ラーメン",
-        area: "あびこ",
-        address: "住吉区我孫子東2丁目",
-        description: "あびこ駅徒歩2分のラーメン店。こってり系が人気。",
-        maps: "https://maps.google.com/?q=釈迦力+友+あびこ店",
-        lat: 34.6048, lng: 135.5198
+        area: "長居",
+        address: "阿倍野区西田辺町2-5-4",
+        description: "本格札幌味噌ラーメン。濃厚味噌スープが寒い日にぴったり。",
+        maps: "https://maps.google.com/?q=みそ吟+長居公園店",
+        lat: 34.61420, lng: 135.51520
       },
+      {
+        name: "くしよし 本店",
+        category: "串揚げ",
+        area: "長居",
+        address: "阿倍野区西田辺町2-1-23",
+        description: "炭火焼・串カツの人気店。サクサクの串カツが美味しい。",
+        maps: "https://maps.google.com/?q=くしよし+本店+西田辺",
+        lat: 34.61380, lng: 135.51480
+      },
+      // ============ あびこ駅エリア - 苅田7丁目（駅北側） ============
       {
         name: "中華そば 閃",
         category: "ラーメン",
         area: "あびこ",
-        address: "住吉区我孫子付近",
-        description: "あっさり系の中華そばが評判。食べログ高評価。",
+        address: "住吉区苅田7-6-15",
+        description: "あっさり系の中華そばが評判。食べログ高評価。あびこ駅徒歩3分。",
         maps: "https://maps.google.com/?q=中華そば+閃+あびこ",
-        lat: 34.6055, lng: 135.5185
-      },
-      {
-        name: "中華そば かみなり",
-        category: "ラーメン",
-        area: "あびこ",
-        address: "住吉区我孫子付近",
-        description: "百名店の姉妹店。丁寧に作られた中華そばが評判。",
-        maps: "https://maps.google.com/?q=中華そば+かみなり+あびこ+大阪",
-        lat: 34.6052, lng: 135.5172
+        lat: 34.60620, lng: 135.51400
       },
       {
         name: "ガンジス 我孫子店",
         category: "カレー",
         area: "あびこ",
-        address: "住吉区我孫子3丁目",
-        description: "本場インドカレーとタンドリー料理。あびこ駅徒歩3分。ナンが美味しい。",
+        address: "住吉区苅田7-4-23",
+        description: "本場インドカレーとタンドリー料理。あびこ駅徒歩2分。ナンが美味しい。",
         maps: "https://maps.google.com/?q=ガンジス+我孫子店+大阪",
-        lat: 34.6045, lng: 135.5205
+        lat: 34.60650, lng: 135.51380
+      },
+      {
+        name: "肉のオカヤマ直売所",
+        category: "焼肉",
+        area: "あびこ",
+        address: "住吉区苅田7-3-10",
+        description: "精肉店直営BBQ。好きなお肉を買ってその場で焼ける。揚げ物テイクアウトも充実。",
+        maps: "https://maps.google.com/?q=肉のオカヤマ直売所+あびこ",
+        lat: 34.60680, lng: 135.51360
       },
       {
         name: "ラマイ 大阪あびこ店",
@@ -745,25 +740,72 @@
         address: "住吉区苅田7-12-5",
         description: "北海道百名店のスープカレー。バリ生まれ札幌育ちの味が大阪へ。あびこ駅徒歩1分。",
         maps: "https://maps.google.com/?q=アジアンバーラマイ+大阪あびこ店",
-        lat: 34.6058, lng: 135.5192
+        lat: 34.60500, lng: 135.51420
+      },
+      // ============ 苅田5丁目（駅付近・南側） ============
+      {
+        name: "双琉",
+        category: "中華",
+        area: "あびこ",
+        address: "住吉区苅田5-6-5",
+        description: "本場四川の豆板醤を使った麻婆豆腐が人気の中華料理店。あびこ駅徒歩7分。",
+        maps: "https://maps.google.com/?q=中国小菜+双琉+あびこ",
+        lat: 34.60350, lng: 135.51320
+      },
+      {
+        name: "釈迦力 友 あびこ店",
+        category: "ラーメン",
+        area: "あびこ",
+        address: "住吉区苅田5-19-4",
+        description: "あびこ駅徒歩2分のラーメン店。こってり二郎系が人気。",
+        maps: "https://maps.google.com/?q=釈迦力+友+あびこ店",
+        lat: 34.59990, lng: 135.51310
       },
       {
         name: "炭火焼鳥 とこ葉 あびこ店",
         category: "焼鳥",
         area: "あびこ",
-        address: "住吉区我孫子3丁目",
+        address: "住吉区苅田5-19-5",
         description: "絶品伊勢赤鶏の焼鳥。こだわりの串焼きが堪能できる。",
         maps: "https://maps.google.com/?q=炭火焼鳥+とこ葉+あびこ店",
-        lat: 34.6042, lng: 135.5200
+        lat: 34.59980, lng: 135.51325
+      },
+      {
+        name: "松屋 あびこ店",
+        category: "定食・丼",
+        area: "あびこ",
+        address: "住吉区苅田5-19-17",
+        description: "牛めし・カレー・定食・松のや併設。24時間営業。あびこ駅徒歩1分。",
+        maps: "https://maps.google.com/?q=松屋+あびこ店+大阪",
+        lat: 34.59974, lng: 135.51312 // OSM実測
+      },
+      {
+        name: "串揚げ あとわ あびこ店",
+        category: "串揚げ",
+        area: "あびこ",
+        address: "住吉区苅田9-15-39",
+        description: "あびこ駅徒歩1分。串揚げ8本御膳1500円。揚げたてサクサクの串揚げ。",
+        maps: "https://maps.google.com/?q=串揚げ+あとわ+あびこ店",
+        lat: 34.59880, lng: 135.51350
+      },
+      // ============ 苅田3丁目・我孫子 ============
+      {
+        name: "すえ広",
+        category: "とんかつ",
+        area: "あびこ",
+        address: "住吉区苅田3-14-14",
+        description: "地元で長く愛されるかつ料理店。蓋が閉まらないかつ重が名物。玄米とろろ定食も。",
+        maps: "https://maps.google.com/?q=すえ広+とんかつ+あびこ",
+        lat: 34.60400, lng: 135.51100
       },
       {
         name: "肉匠 牛虎 あびこ",
         category: "焼肉",
         area: "あびこ",
-        address: "住吉区我孫子付近",
+        address: "住吉区我孫子東2-7-5",
         description: "精肉店直営。黒毛和牛をリーズナブルに。食べ放題プランもあり。",
         maps: "https://maps.google.com/?q=肉匠+牛虎+あびこ",
-        lat: 34.6038, lng: 135.5188
+        lat: 34.60250, lng: 135.51480
       },
       {
         name: "pipi aina",
@@ -772,61 +814,7 @@
         address: "住吉区我孫子3-5-20",
         description: "焼肉レストラン。ランチ11:00-15:00、ディナー17:00-23:00。",
         maps: "https://maps.google.com/?q=pipi+aina+我孫子+大阪",
-        lat: 34.6040, lng: 135.5202
-      },
-      {
-        name: "肉のオカヤマ直売所",
-        category: "焼肉",
-        area: "あびこ",
-        address: "住吉区苅田付近",
-        description: "精肉店直営BBQ。好きなお肉を買ってその場で焼ける。揚げ物テイクアウトも充実。",
-        maps: "https://maps.google.com/?q=肉のオカヤマ直売所+あびこ",
-        lat: 34.6062, lng: 135.5180
-      },
-      {
-        name: "松屋 あびこ店",
-        category: "定食・丼",
-        area: "あびこ",
-        address: "住吉区我孫子東2丁目",
-        description: "牛めし・カレー・定食。リーズナブルで深夜まで営業。",
-        maps: "https://maps.google.com/?q=松屋+あびこ店+大阪",
-        lat: 34.6050, lng: 135.5195
-      },
-      {
-        name: "咖喱饂飩 たちばな",
-        category: "うどん・そば",
-        area: "あびこ",
-        address: "住吉区我孫子付近",
-        description: "石鍋カレーうどん専門店。濃厚なカレーとモチモチのうどんが絶妙。",
-        maps: "https://maps.google.com/?q=咖喱饂飩+たちばな+あびこ",
-        lat: 34.6056, lng: 135.5178
-      },
-      {
-        name: "双琉",
-        category: "中華",
-        area: "あびこ",
-        address: "住吉区我孫子付近",
-        description: "本場四川の豆板醤を使った麻婆豆腐が人気の中華料理店。あびこ駅徒歩5分。",
-        maps: "https://maps.google.com/?q=中国小菜+双琉+あびこ",
-        lat: 34.6044, lng: 135.5175
-      },
-      {
-        name: "串揚げ あとわ あびこ店",
-        category: "串揚げ",
-        area: "あびこ",
-        address: "住吉区苅田付近",
-        description: "あびこ駅徒歩1分。串揚げ8本御膳1500円。揚げたてサクサクの串揚げ。",
-        maps: "https://maps.google.com/?q=串揚げ+あとわ+あびこ店",
-        lat: 34.6053, lng: 135.5190
-      },
-      {
-        name: "すえ広",
-        category: "とんかつ",
-        area: "あびこ",
-        address: "住吉区苅田3-14-14",
-        description: "地元で長く愛されるかつ料理店。蓋が閉まらないかつ重が名物。玄米とろろ定食も。",
-        maps: "https://maps.google.com/?q=すえ広+とんかつ+あびこ",
-        lat: 34.6060, lng: 135.5170
+        lat: 34.60150, lng: 135.51420
       }
     ];
 
