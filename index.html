@@ -112,17 +112,6 @@
       border: 2px solid #ff6666;
     }
 
-    .card .area-tag {
-      display: inline-block;
-      background: #224422;
-      color: #66ff66;
-      padding: 0.2rem 0.6rem;
-      font-size: 0.65rem;
-      margin-bottom: 0.8rem;
-      margin-left: 0.3rem;
-      border: 2px solid #66ff66;
-    }
-
     .card h2 {
       font-size: 1.3rem;
       margin-bottom: 0.5rem;
@@ -161,44 +150,7 @@
       color: #0f0f23;
     }
 
-    .actions {
-      display: flex;
-      gap: 0.8rem;
-      justify-content: center;
-      margin: 0 1rem 2rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      background: #1a1a2e;
-      color: #cccccc;
-      border: 3px solid #555;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-family: 'DotGothic16', monospace;
-      transition: all 0.1s;
-    }
-
-    .btn:hover {
-      border-color: #ffcc00;
-      color: #ffcc00;
-      transform: translate(-2px, -2px);
-      box-shadow: 2px 2px 0 #ffcc00;
-    }
-
-    .btn:active {
-      transform: translate(0, 0);
-      box-shadow: none;
-    }
-
-    .btn.active {
-      border-color: #ffcc00;
-      color: #ffcc00;
-      background: #2a2a10;
-    }
-
-    /* 地图区域 - 大幅加大 */
+    /* 地图区域 */
     .map-section {
       width: calc(100% - 2rem);
       max-width: 960px;
@@ -287,32 +239,6 @@
       vertical-align: middle;
       border: 1px solid #333;
     }
-
-    .history-section {
-      max-width: 480px;
-      width: calc(100% - 2rem);
-      margin: 0 auto 2rem;
-    }
-
-    .history-section h3 {
-      font-size: 0.85rem;
-      color: #ff6666;
-      margin-bottom: 0.8rem;
-      text-align: center;
-    }
-
-    .history-section h3::before { content: "> "; color: #ffcc00; }
-
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.4rem 0;
-      border-bottom: 1px dashed #333;
-      font-size: 0.75rem;
-    }
-
-    .history-item .date { color: #666; }
-    .history-item .name { color: #cccccc; }
 
     .list-section {
       max-width: 720px;
@@ -447,11 +373,6 @@
     <div id="cardContent"></div>
   </div>
 
-  <div class="actions">
-    <button class="btn" id="rerollBtn" onclick="reroll()">[ 换一家 ]</button>
-    <button class="btn" id="historyBtn" onclick="toggleHistory()">[ 历史 ]</button>
-  </div>
-
   <div class="map-section">
     <h3>MAP</h3>
     <div id="mapContainer" class="pixel-border"></div>
@@ -460,11 +381,6 @@
       <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
       <span><span class="dot" style="background:#ffcc00;border-color:#ffcc00;"></span>今日推荐</span>
     </div>
-  </div>
-
-  <div class="history-section" id="historySection" style="display:none;">
-    <h3>最近7天的推荐</h3>
-    <div id="historyList"></div>
   </div>
 
   <div class="list-section">
@@ -841,25 +757,22 @@
       return `${y}年${m}月${d}日（${w}）`;
     }
 
-    function getDailyPick(offset = 0) {
-      const seed = getDateSeed() + offset;
+    function getDailyPick() {
+      const seed = getDateSeed();
       return Math.floor(seededRandom(seed) * restaurants.length);
     }
 
-    let rerollCount = 0;
     let currentPickIdx = 0;
     let map = null;
     let markers = [];
     let highlightMarker = null;
 
     function renderCard() {
-      currentPickIdx = getDailyPick(rerollCount);
+      currentPickIdx = getDailyPick();
       const r = restaurants[currentPickIdx];
-      saveToHistory(r.name);
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
-        <span class="area-tag">${r.area}周边</span>
         <h2>${r.name}</h2>
         <p class="address">${r.address}</p>
         <p class="description">${r.description}</p>
@@ -868,59 +781,10 @@
 
       document.getElementById('dateDisplay').textContent = getTodayStr();
 
-      const hunger = 50 + Math.floor(seededRandom(getDateSeed() + rerollCount + 99) * 50);
+      const hunger = 50 + Math.floor(seededRandom(getDateSeed() + 99) * 50);
       document.getElementById('hungerBar').style.width = hunger + '%';
 
       highlightOnMap(currentPickIdx);
-    }
-
-    function reroll() {
-      rerollCount++;
-      renderCard();
-      const card = document.getElementById('mainCard');
-      card.style.transform = 'scale(0.95)';
-      card.style.opacity = '0.7';
-      setTimeout(() => {
-        card.style.transform = 'scale(1)';
-        card.style.opacity = '1';
-      }, 150);
-    }
-
-    function saveToHistory(name) {
-      const today = getTodayStr();
-      let history = JSON.parse(localStorage.getItem('dinnerHistory') || '[]');
-      history = history.filter(h => h.date !== today);
-      history.unshift({ date: today, name: name });
-      history = history.slice(0, 7);
-      localStorage.setItem('dinnerHistory', JSON.stringify(history));
-    }
-
-    function toggleHistory() {
-      const section = document.getElementById('historySection');
-      const btn = document.getElementById('historyBtn');
-      if (section.style.display === 'none') {
-        section.style.display = 'block';
-        btn.classList.add('active');
-        renderHistory();
-      } else {
-        section.style.display = 'none';
-        btn.classList.remove('active');
-      }
-    }
-
-    function renderHistory() {
-      const history = JSON.parse(localStorage.getItem('dinnerHistory') || '[]');
-      const list = document.getElementById('historyList');
-      if (history.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#666;font-size:0.75rem;">暂无历史记录</p>';
-        return;
-      }
-      list.innerHTML = history.map(h => `
-        <div class="history-item">
-          <span class="date">${h.date}</span>
-          <span class="name">${h.name}</span>
-        </div>
-      `).join('');
     }
 
     function getCategories() {
@@ -956,7 +820,7 @@
           <div class="restaurant-item" onmouseenter="focusMarker(${restaurants.indexOf(r)})">
             <div class="info">
               <h4>${r.name}</h4>
-              <span>${r.area} / ${r.address}</span>
+              <span>${r.address}</span>
             </div>
             <span class="tag">${r.category}</span>
           </div>
@@ -1012,7 +876,7 @@
 
         marker.bindPopup(`
           <div class="popup-name">${r.name}</div>
-          <div class="popup-cat">${r.category} / ${r.area}</div>
+          <div class="popup-cat">${r.category}</div>
           <div style="color:#999;font-size:0.65rem;margin-top:2px;">${r.description}</div>
           <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
         `, { className: 'pixel-popup', maxWidth: 250 });
@@ -1046,7 +910,7 @@
       highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
       highlightMarker.bindPopup(`
         <div class="popup-name">今日推荐 >> ${r.name}</div>
-        <div class="popup-cat">${r.category} / ${r.area}</div>
+        <div class="popup-cat">${r.category}</div>
         <div style="color:#999;font-size:0.65rem;margin-top:2px;">${r.description}</div>
         <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
       `, { className: 'pixel-popup', maxWidth: 250 }).openPopup();
