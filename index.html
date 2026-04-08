@@ -456,8 +456,7 @@
     <h3>MAP</h3>
     <div id="mapContainer" class="pixel-border"></div>
     <div class="map-legend">
-      <span><span class="dot" style="background:#ff4444;"></span>長居エリア</span>
-      <span><span class="dot" style="background:#44aaff;"></span>あびこエリア</span>
+      <span><span class="dot" style="background:#ff4444;"></span>店舗</span>
       <span><span class="dot" style="background:#ffcc00;border-color:#ffcc00;"></span>今日のおすすめ</span>
     </div>
   </div>
@@ -1004,11 +1003,10 @@
         attribution: '&copy; OpenStreetMap &copy; CARTO'
       }).addTo(map);
 
-      const nagaiIcon = createPixelIcon('#ff4444', 24);
-      const abikoIcon = createPixelIcon('#44aaff', 24);
+      const defaultIcon = createPixelIcon('#ff4444', 24);
 
       restaurants.forEach((r, i) => {
-        const icon = r.area === '長居' ? nagaiIcon : abikoIcon;
+        const icon = defaultIcon;
         const marker = L.marker([r.lat, r.lng], { icon: icon }).addTo(map);
 
         marker.bindPopup(`
