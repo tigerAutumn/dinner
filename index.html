@@ -411,7 +411,7 @@
       </div>
 
       <div class="list-section">
-    <h3>全部店铺（<span id="totalCount"></span>家）</h3>
+    <h3>全部店铺（<span id="totalCount"></span>家）<span style="font-size:0.55rem;color:#666;margin-left:0.5rem;">评分来源：食べログ</span></h3>
     <div class="filter-bar" id="filterBar"></div>
     <div class="restaurant-list-grid" id="restaurantList"></div>
       </div>
@@ -858,7 +858,7 @@
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
-        <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${ri.label} ${r.rating} 食べログ</span>
+        <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${ri.label} ${r.rating}</span>
         <h2>${r.name}</h2>
         <p class="description">${r.description}</p>
         <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
@@ -905,7 +905,7 @@
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
-              <span class="tag" style="color:${ri.color};border-color:${ri.color};">${ri.label} ${r.rating} 食べログ</span>
+              <span class="tag" style="color:${ri.color};border-color:${ri.color};">${ri.label} ${r.rating}</span>
               <span class="tag" style="margin-top:4px;display:block;">${r.category}</span>
             </div>
           </div>`;
