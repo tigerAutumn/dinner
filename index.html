@@ -671,6 +671,12 @@
 
     function getDailyPick() {
       const seed = getDateSeed();
+      // 尝试最多restaurants.length次，跳过定休日的店
+      for (let offset = 0; offset < restaurants.length; offset++) {
+        const idx = Math.floor(seededRandom(seed + offset) * restaurants.length);
+        if (!isClosedToday(restaurants[idx])) return idx;
+      }
+      // 全部定休（不太可能），返回第一个
       return Math.floor(seededRandom(seed) * restaurants.length);
     }
 
@@ -701,12 +707,10 @@
     function renderCard() {
       currentPickIdx = getDailyPick();
       const r = restaurants[currentPickIdx];
-      const closed = isClosedToday(r);
       const closedText = getClosedText(r);
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
-        ${closed ? '<span class="closed-tag">今日定休</span>' : ''}
         <h2>${r.name}</h2>
         <p class="address">${r.address}</p>
         <p class="description">${r.description}</p>
