@@ -110,10 +110,27 @@
       }
       .left-panel {
         flex: 0 0 400px;
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 2rem);
         position: sticky;
         top: 1rem;
-        max-height: calc(100vh - 2rem);
+        overflow: hidden;
+      }
+      .left-panel .card {
+        flex-shrink: 0;
+      }
+      .left-panel .list-section {
+        flex: 1;
         overflow-y: auto;
+        min-height: 0;
+      }
+      .left-panel .list-section .filter-bar {
+        position: sticky;
+        top: 0;
+        background: #0f0f23;
+        z-index: 10;
+        padding: 0.5rem 0;
       }
       .right-panel {
         flex: 1;
@@ -909,8 +926,7 @@
       document.getElementById('totalCount').textContent = filtered.length;
 
       list.innerHTML = filtered.map((r, i) => `
-        <a href="${r.maps}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-          <div class="restaurant-item" onmouseenter="focusMarker(${restaurants.indexOf(r)})">
+          <div class="restaurant-item" onclick="focusMarker(${restaurants.indexOf(r)})">
             <div class="info">
               <h4>${r.name}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
@@ -920,7 +936,6 @@
               <span class="tag" style="color:#ffcc00;border-color:#ffcc00;margin-top:4px;display:block;">~${r.price}円</span>
             </div>
           </div>
-        </a>
       `).join('');
     }
 
