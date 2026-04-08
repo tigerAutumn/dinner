@@ -810,8 +810,6 @@
             <div style="font-size:2rem;margin-bottom:0.5rem;">
               zzZ...
             </div>
-            <p style="color:#66ff66;font-size:0.9rem;margin-bottom:0.5rem;">今天是周日</p>
-            <p style="color:#888;font-size:0.75rem;">在家休息，不用考虑晚饭</p>
           </div>
         `;
         document.getElementById('dateDisplay').textContent = getTodayStr();
@@ -855,7 +853,7 @@
       const nowM = jst.getUTCMinutes();
       const nowTotal = nowH * 60 + nowM;
       const offTotal = offHour * 60 + offMin;
-      const workStart = 9 * 60; // 9:00开始算
+      const workStart = 10 * 60; // 10:00开始算
 
       let label, pct, color;
       if (nowTotal >= offTotal) {
