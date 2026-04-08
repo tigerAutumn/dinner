@@ -132,6 +132,24 @@
       margin-bottom: 1.2rem;
     }
 
+    .card .closed-tag {
+      display: inline-block;
+      background: #442222;
+      color: #ff4444;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      margin-left: 0.3rem;
+      border: 2px solid #ff4444;
+      animation: blink 1.5s infinite;
+    }
+
+    .card .hours-info {
+      color: #888;
+      font-size: 0.7rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
     .card .map-link {
       display: inline-block;
       background: #224488;
@@ -391,238 +409,238 @@
   <script>
     // 坐标来源：国土地理院GSI API + OSM Overpass API 实测
     const restaurants = [
-      // ============ 长居东4丁目（公司附近） ============
+      // ============ 长居东4丁目 ============
       {
-        name: "CoCo壱番屋 長居公園前店",
-        category: "咖喱",
+        name: "CoCo壱番屋 長居公園前店", category: "咖喱",
         address: "住吉区長居東4-1-12",
         description: "稳定的CoCo壱。配料自由搭配，选择丰富。",
+        hours: "11:00-24:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=CoCo壱番屋+長居公園前店",
         lat: 34.61197, lng: 135.51380
       },
       {
-        name: "やよい軒 長居店",
-        category: "定食・盖饭",
+        name: "やよい軒 長居店", category: "定食・盖饭",
         address: "住吉区長居東4-1-12",
         description: "丰富的日式定食连锁。米饭免费续添，菜品种类多。",
+        hours: "4:00-翌3:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=やよい軒+長居店",
         lat: 34.61173, lng: 135.51363
       },
       {
-        name: "吉野家 長居店",
-        category: "定食・盖饭",
+        name: "吉野家 長居店", category: "定食・盖饭",
         address: "住吉区長居東4-2-3",
         description: "快捷实惠的牛肉饭连锁店。",
+        hours: "5:00-翌2:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=吉野家+長居店+大阪",
         lat: 34.61137, lng: 135.51370
       },
       {
-        name: "餃子の王将 長居店",
-        category: "中餐",
+        name: "餃子の王将 長居店", category: "中餐",
         address: "住吉区長居東4-2-1",
         description: "饺子・炒饭・中华料理连锁。现包现煎的饺子是招牌。",
+        hours: "11:00-23:00（周日至22:30）", closed: [], // 无休
         maps: "https://maps.google.com/?q=餃子の王将+長居店",
         lat: 34.61160, lng: 135.51376
       },
       {
-        name: "モスバーガー 長居店",
-        category: "快餐",
+        name: "モスバーガー 長居店", category: "快餐",
         address: "住吉区長居東4-2-10",
         description: "品质汉堡连锁。手工制作，蔬菜新鲜。",
+        hours: "9:00-20:45", closed: [], // 不定休
         maps: "https://maps.google.com/?q=モスバーガー+長居店",
         lat: 34.61090, lng: 135.51354
       },
       {
-        name: "麺屋 壱",
-        category: "拉面",
+        name: "麺屋 壱", category: "拉面",
         address: "住吉区長居東4-2-20",
         description: "浓厚つけ麺和油拌面。中毒性超强的辣味つけ麺人气。",
+        hours: "11:00-14:00（夜营业不定期）", closed: [1], // 周一
         maps: "https://maps.google.com/?q=麺屋+壱+長居",
         lat: 34.61157, lng: 135.51332
       },
       {
-        name: "大松 長居店",
-        category: "烤肉",
+        name: "大松 長居店", category: "烤肉",
         address: "住吉区長居東4-2-7",
         description: "大众烤肉・内脏专门店。50种以上菜品，长居站步行1分钟。",
+        hours: "周一至五 17:00-23:30 / 周末祝 15:00-23:30", closed: [], // 无休
         maps: "https://maps.google.com/?q=大衆焼肉ホルモン+大松+長居店",
         lat: 34.61106, lng: 135.51370
       },
       {
-        name: "ケンタッキー 長居店",
-        category: "快餐",
+        name: "ケンタッキー 長居店", category: "快餐",
         address: "住吉区長居東4-1-12",
         description: "想吃炸鸡的日子来这里。套餐种类丰富。",
+        hours: "10:00-22:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=ケンタッキー+長居店+大阪",
         lat: 34.61177, lng: 135.51371
       },
       {
-        name: "天下一品 長居店",
-        category: "拉面",
+        name: "天下一品 長居店", category: "拉面",
         address: "住吉区長居東4-5-1",
         description: "招牌浓厚鸡白汤拉面。こってり(浓厚)还是あっさり(清爽)二选一。",
+        hours: "11:00-24:30（周日祝至23:30）", closed: [], // 年末年始のみ
         maps: "https://maps.google.com/?q=天下一品+長居店",
         lat: 34.61060, lng: 135.51366
       },
       {
-        name: "NENE CHICKEN 長居駅前店",
-        category: "韩国料理",
+        name: "NENE CHICKEN 長居駅前店", category: "韩国料理",
         address: "住吉区長居東4-5-1",
         description: "韩国人气炸鸡专门店。多种口味酱料可选。",
+        hours: "营业时间请确认", closed: [],
         maps: "https://maps.google.com/?q=NENE+CHICKEN+長居駅前店",
         lat: 34.61047, lng: 135.51356
       },
       {
-        name: "浪花屋",
-        category: "章鱼烧",
+        name: "浪花屋", category: "章鱼烧",
         address: "住吉区長居東4-6-8",
         description: "米其林必比登连续3年入选。外酥内软的章鱼烧，创业37年老店。",
+        hours: "10:00-16:30（卖完即止）", closed: [2, 3, 4], // 周二三四
         maps: "https://maps.google.com/?q=浪花屋+たこ焼き+長居",
         lat: 34.60949, lng: 135.51314
       },
       {
-        name: "ハンバーグレストランBOSTON 長居店",
-        category: "西餐",
+        name: "ハンバーグレストランBOSTON 長居店", category: "西餐",
         address: "住吉区長居東4-6-15",
-        description: "1952年创业的大阪名物汉堡排。长居公园对面，午餐・晚餐营业。",
+        description: "1952年创业的大阪名物汉堡排。长居公园对面。",
+        hours: "11:30-15:00 / 17:30-22:00", closed: [], // 无休(年末年始除く)
         maps: "https://maps.google.com/?q=ハンバーグレストランBOSTON+長居店",
         lat: 34.60958, lng: 135.51347
       },
       {
-        name: "大阪王将 長居店",
-        category: "中餐",
+        name: "大阪王将 長居店", category: "中餐",
         address: "住吉区長居東4-7-15",
         description: "饺子专门店的自信之作。铁板煎饺和中华料理。",
+        hours: "11:30-22:15", closed: [], // 无休
         maps: "https://maps.google.com/?q=大阪王将+長居店",
         lat: 34.60952, lng: 135.51202
       },
       {
-        name: "ラーメン男塾 長居店",
-        category: "拉面",
+        name: "ラーメン男塾 長居店", category: "拉面",
         address: "住吉区長居東4-11-24",
         description: "硬核系拉面。主打大份量。",
+        hours: "11:00-22:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=ラーメン男塾+長居店",
         lat: 34.60923, lng: 135.51315
       },
       {
-        name: "SURAJ 長居店",
-        category: "印度料理",
+        name: "SURAJ 長居店", category: "印度料理",
         address: "住吉区長居東4-2-22",
         description: "正宗印度料理专门店。咖喱・馕饼・坦都里烤鸡。长居站步行1分钟。",
+        hours: "11:00-15:00 / 17:00-22:30", closed: [], // 无休(元日のみ)
         maps: "https://maps.google.com/?q=SURAJ+長居店",
         lat: 34.61165, lng: 135.51344
       },
       {
-        name: "ダイヤモンドスター2 長居店",
-        category: "印度料理",
+        name: "ダイヤモンドスター2 長居店", category: "印度料理",
         address: "住吉区長居東4-10-17",
-        description: "尼泊尔老板的印度・尼泊尔料理。咖喱饭吃到饱午餐套餐超值。还有沙瓦尔玛。",
+        description: "尼泊尔老板的印度・尼泊尔料理。咖喱饭吃到饱午餐套餐超值。",
+        hours: "11:00-15:00 / 17:00-22:30", closed: [], // 不定休
         maps: "https://maps.google.com/?q=ダイヤモンドスター+長居",
         lat: 34.60876, lng: 135.51245
       },
       {
-        name: "龍福 長居駅前店",
-        category: "中餐",
+        name: "龍福 長居駅前店", category: "中餐",
         address: "住吉区長居東4丁目付近",
         description: "手工肉包子专门店。大阪人气豚まん，外带也方便。",
+        hours: "10:00-20:00", closed: [2], // 周二
         maps: "https://maps.google.com/?q=龍福+長居駅前店",
         lat: 34.60922, lng: 135.51310
       },
       {
-        name: "中華蕎麦 丸蔵",
-        category: "拉面",
+        name: "中華蕎麦 丸蔵", category: "拉面",
         address: "住吉区長居東4-15-33",
         description: "横滨名店出身。无化学调味料的中华荞麦面，仅10个座位的人气店。",
+        hours: "11:30-14:30 / 18:00-23:00", closed: [3], // 周三
         maps: "https://maps.google.com/?q=中華蕎麦+丸蔵+長居",
         lat: 34.60848, lng: 135.51183
       },
       // ============ 长居东3丁目（回家路上） ============
       {
-        name: "創作うどん ほしの",
-        category: "乌冬・荞麦",
+        name: "創作うどん ほしの", category: "乌冬・荞麦",
         address: "住吉区長居東3-1-28",
         description: "来自香川善通寺的乌冬面。50种以上菜单，咖喱乌冬最受欢迎。",
+        hours: "11:00-15:00 / 18:00-21:30（周末通し）", closed: [3], // 周三
         maps: "https://maps.google.com/?q=創作うどん+ほしの+長居",
         lat: 34.60924, lng: 135.51634
       },
       {
-        name: "釜揚げうどん 一心",
-        category: "乌冬・荞麦",
+        name: "釜揚げうどん 一心", category: "乌冬・荞麦",
         address: "住吉区長居東3-4-21",
-        description: "乌冬WEST百名店2024。现打现煮的釜扬乌冬专门店，卖完即止（约13点）。",
+        description: "乌冬WEST百名店2024。现打现煮的釜扬乌冬，卖完即止（约13点）。",
+        hours: "11:00-16:00 / 17:30-21:00（卖完即止）", closed: [2], // 周二
         maps: "https://maps.google.com/?q=釜揚げうどん+一心+長居",
         lat: 34.60800, lng: 135.51373
       },
       {
-        name: "咖喱饂飩 たちばな",
-        category: "乌冬・荞麦",
+        name: "咖喱饂飩 たちばな", category: "乌冬・荞麦",
         address: "住吉区長居東3-7-5",
         description: "石锅咖喱乌冬专门店。浓郁咖喱配Q弹乌冬，绝妙搭配。",
+        hours: "11:15-15:15 / 17:30-21:00", closed: [], closedNote: "第1・3・5周二",
         maps: "https://maps.google.com/?q=咖喱饂飩+たちばな+長居",
         lat: 34.60787, lng: 135.51724
       },
       {
-        name: "ホルモン本舗 長居店",
-        category: "烤肉",
+        name: "ホルモン本舗 長居店", category: "烤肉",
         address: "住吉区長居東3-14-22",
         description: "新鲜内脏烤肉店。黑毛和牛上等肉全品1078日元。",
+        hours: "17:00-翌2:30（周日至23:00）", closed: [], // 不定休
         maps: "https://maps.google.com/?q=ホルモン本舗+長居店",
         lat: 34.60702, lng: 135.51364
       },
       {
-        name: "五味八珍 長居店",
-        category: "中餐",
+        name: "五味八珍 長居店", category: "中餐",
         address: "住吉区長居東3-14-22",
         description: "老牌町中华料理店。拉面・炒饭・定食，价格实惠量大。",
+        hours: "11:00-翌4:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=五味八珍+長居店",
         lat: 34.60702, lng: 135.51364
       },
       {
-        name: "中華そば かみなり雲呑",
-        category: "拉面",
+        name: "中華そば かみなり雲呑", category: "拉面",
         address: "住吉区長居東3-14-22",
         description: "拉面OSAKA百名店2025入选。肉馄饨・虾馄饨绝品。食べログ3.68。",
+        hours: "11:30-14:30 / 18:00-21:30", closed: [1], closedNote: "周一全天+周四仅午餐", // 周一
         maps: "https://maps.google.com/?q=中華そば+かみなり雲呑+長居",
         lat: 34.60610, lng: 135.51370
       },
       {
-        name: "百十 我孫子筋店",
-        category: "大阪烧",
+        name: "百十 我孫子筋店", category: "大阪烧",
         address: "住吉区長居東3-15-26",
         description: "多年来深受当地人喜爱的大阪烧・文字烧店。",
+        hours: "17:00-翌1:00", closed: [1], // 周一(祝日翌日休)
         maps: "https://maps.google.com/?q=百十+我孫子筋店+長居",
         lat: 34.60573, lng: 135.51358
       },
       // ============ 长居 西侧（JR站附近） ============
       {
-        name: "又三郎",
-        category: "烤肉",
+        name: "又三郎", category: "烤肉",
         address: "住吉区長居2-13-13",
         description: "食べログ百名店的熟成肉烤肉。黑毛和牛与熟成牛排绝品。",
+        hours: "11:30-14:30 / 17:30-23:00", closed: [1, 4], // 周一・周四
         maps: "https://maps.google.com/?q=又三郎+大阪市住吉区長居",
         lat: 34.61215, lng: 135.51274
       },
       {
-        name: "とんかつ本田",
-        category: "炸猪排",
+        name: "とんかつ本田", category: "炸猪排",
         address: "住吉区長居2-12-10",
         description: "JR长居站西口步行1分钟的人气炸猪排店。午餐时段常满座。",
+        hours: "11:00-21:00", closed: [4], // 周四
         maps: "https://maps.google.com/?q=とんかつ本田+長居",
         lat: 34.61186, lng: 135.51178
       },
       {
-        name: "ぎょうざの満洲 JR長居駅店",
-        category: "中餐",
+        name: "ぎょうざの満洲 JR長居駅店", category: "中餐",
         address: "住吉区長居2丁目",
-        description: "埼�的煎饺连锁名店。3割うまい(好吃三成)是口号。JR长居站内。",
+        description: "埼玉的煎饺连锁名店。「3割うまい」(好吃三成)是口号。JR长居站内。",
+        hours: "11:00-21:00", closed: [], // 无休
         maps: "https://maps.google.com/?q=ぎょうざの満洲+JR長居駅店",
         lat: 34.61282, lng: 135.51201
       },
       {
-        name: "すえ広",
-        category: "炸猪排",
+        name: "すえ広", category: "炸猪排",
         address: "住吉区苅田3-14-14",
-        description: "深受当地人喜爱的炸猪排老店。盖不住盖子的炸猪排重是招牌。玄米山药定食也推荐。",
+        description: "深受当地人喜爱的炸猪排老店。盖不住盖子的炸猪排重是招牌。",
+        hours: "11:00-14:00 / 17:30-20:30", closed: [6], // 周六
         maps: "https://maps.google.com/?q=すえ広+とんかつ+あびこ",
         lat: 34.60257, lng: 135.51388
       }
@@ -661,15 +679,38 @@
     let markers = [];
     let highlightMarker = null;
 
+    // 判断今天是否定休
+    function isClosedToday(r) {
+      const now = new Date();
+      const jst = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      const day = jst.getUTCDay(); // 0=日 1=月 2=火 3=水 4=木 5=金 6=土
+      return r.closed && r.closed.includes(day);
+    }
+
+    function getClosedText(r) {
+      if ((!r.closed || r.closed.length === 0) && !r.closedNote) return '';
+      const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      let parts = [];
+      if (r.closed && r.closed.length > 0) {
+        parts.push(r.closed.map(d => dayNames[d]).join('・'));
+      }
+      if (r.closedNote) parts.push(r.closedNote);
+      return parts.join(' / ');
+    }
+
     function renderCard() {
       currentPickIdx = getDailyPick();
       const r = restaurants[currentPickIdx];
+      const closed = isClosedToday(r);
+      const closedText = getClosedText(r);
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
+        ${closed ? '<span class="closed-tag">今日定休</span>' : ''}
         <h2>${r.name}</h2>
         <p class="address">${r.address}</p>
         <p class="description">${r.description}</p>
+        <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
         <a class="map-link" href="${r.maps}" target="_blank" rel="noopener">[ Google Maps ]</a>
       `;
 
