@@ -392,29 +392,58 @@
   <script>
     // 坐标来源：国土地理院GSI API + OSM Overpass API 实测
     const restaurants = [
-      // ============ 长居站周边 - 长居东4丁目 ============
+      // ============ 长居东4丁目（公司附近） ============
       {
         name: "CoCo壱番屋 長居公園前店",
         category: "咖喱",
-        area: "長居",
         address: "住吉区長居東4-1-12",
         description: "稳定的CoCo壱。配料自由搭配，选择丰富。",
         maps: "https://maps.google.com/?q=CoCo壱番屋+長居公園前店",
         lat: 34.61197, lng: 135.51380
       },
       {
+        name: "やよい軒 長居店",
+        category: "定食・盖饭",
+        address: "住吉区長居東4-1-12",
+        description: "丰富的日式定食连锁。米饭免费续添，菜品种类多。",
+        maps: "https://maps.google.com/?q=やよい軒+長居店",
+        lat: 34.61173, lng: 135.51363
+      },
+      {
         name: "吉野家 長居店",
         category: "定食・盖饭",
-        area: "長居",
         address: "住吉区長居東4-2-3",
         description: "快捷实惠的牛肉饭连锁店。",
         maps: "https://maps.google.com/?q=吉野家+長居店+大阪",
         lat: 34.61137, lng: 135.51370
       },
       {
+        name: "餃子の王将 長居店",
+        category: "中餐",
+        address: "住吉区長居東4-2-1",
+        description: "饺子・炒饭・中华料理连锁。现包现煎的饺子是招牌。",
+        maps: "https://maps.google.com/?q=餃子の王将+長居店",
+        lat: 34.61160, lng: 135.51376
+      },
+      {
+        name: "モスバーガー 長居店",
+        category: "快餐",
+        address: "住吉区長居東4-2-10",
+        description: "品质汉堡连锁。手工制作，蔬菜新鲜。",
+        maps: "https://maps.google.com/?q=モスバーガー+長居店",
+        lat: 34.61090, lng: 135.51354
+      },
+      {
+        name: "麺屋 壱",
+        category: "拉面",
+        address: "住吉区長居東4-2-20",
+        description: "浓厚つけ麺和油拌面。中毒性超强的辣味つけ麺人气。",
+        maps: "https://maps.google.com/?q=麺屋+壱+長居",
+        lat: 34.61157, lng: 135.51332
+      },
+      {
         name: "大松 長居店",
         category: "烤肉",
-        area: "長居",
         address: "住吉区長居東4-2-7",
         description: "大众烤肉・内脏专门店。50种以上菜品，长居站步行1分钟。",
         maps: "https://maps.google.com/?q=大衆焼肉ホルモン+大松+長居店",
@@ -423,16 +452,30 @@
       {
         name: "ケンタッキー 長居店",
         category: "快餐",
-        area: "長居",
         address: "住吉区長居東4-1-12",
         description: "想吃炸鸡的日子来这里。套餐种类丰富。",
         maps: "https://maps.google.com/?q=ケンタッキー+長居店+大阪",
         lat: 34.61177, lng: 135.51371
       },
       {
+        name: "天下一品 長居店",
+        category: "拉面",
+        address: "住吉区長居東4-5-1",
+        description: "招牌浓厚鸡白汤拉面。こってり(浓厚)还是あっさり(清爽)二选一。",
+        maps: "https://maps.google.com/?q=天下一品+長居店",
+        lat: 34.61060, lng: 135.51366
+      },
+      {
+        name: "NENE CHICKEN 長居駅前店",
+        category: "韩国料理",
+        address: "住吉区長居東4-5-1",
+        description: "韩国人气炸鸡专门店。多种口味酱料可选。",
+        maps: "https://maps.google.com/?q=NENE+CHICKEN+長居駅前店",
+        lat: 34.61047, lng: 135.51356
+      },
+      {
         name: "浪花屋",
         category: "章鱼烧",
-        area: "長居",
         address: "住吉区長居東4-6-8",
         description: "米其林必比登连续3年入选。外酥内软的章鱼烧，创业37年老店。",
         maps: "https://maps.google.com/?q=浪花屋+たこ焼き+長居",
@@ -441,7 +484,6 @@
       {
         name: "ハンバーグレストランBOSTON 長居店",
         category: "西餐",
-        area: "長居",
         address: "住吉区長居東4-6-15",
         description: "1952年创业的大阪名物汉堡排。长居公园对面，午餐・晚餐营业。",
         maps: "https://maps.google.com/?q=ハンバーグレストランBOSTON+長居店",
@@ -450,35 +492,47 @@
       {
         name: "ミスタードーナツ 長居ショップ",
         category: "面包・咖啡",
-        area: "長居",
         address: "住吉区長居東4-6-15",
         description: "甜甜圈和轻食。当宵夜也不错。",
         maps: "https://maps.google.com/?q=ミスタードーナツ+長居ショップ",
         lat: 34.60975, lng: 135.51348
       },
       {
+        name: "大阪王将 長居店",
+        category: "中餐",
+        address: "住吉区長居東4-7-15",
+        description: "饺子专门店的自信之作。铁板煎饺和中华料理。",
+        maps: "https://maps.google.com/?q=大阪王将+長居店",
+        lat: 34.60952, lng: 135.51202
+      },
+      {
         name: "ラーメン男塾 長居店",
         category: "拉面",
-        area: "長居",
         address: "住吉区長居東4-11-24",
         description: "硬核系拉面。主打大份量。",
         maps: "https://maps.google.com/?q=ラーメン男塾+長居店",
         lat: 34.60923, lng: 135.51315
       },
       {
+        name: "龍福 長居駅前店",
+        category: "中餐",
+        address: "住吉区長居東4丁目付近",
+        description: "手工肉包子专门店。大阪人气豚まん，外带也方便。",
+        maps: "https://maps.google.com/?q=龍福+長居駅前店",
+        lat: 34.60922, lng: 135.51310
+      },
+      {
         name: "中華蕎麦 丸蔵",
         category: "拉面",
-        area: "長居",
         address: "住吉区長居東4-15-33",
         description: "横滨名店出身。无化学调味料的中华荞麦面，仅10个座位的人气店。",
         maps: "https://maps.google.com/?q=中華蕎麦+丸蔵+長居",
         lat: 34.60848, lng: 135.51183
       },
-      // ============ 长居东3丁目 ============
+      // ============ 长居东3丁目（回家路上） ============
       {
         name: "創作うどん ほしの",
         category: "乌冬・荞麦",
-        area: "長居",
         address: "住吉区長居東3-1-28",
         description: "来自香川善通寺的乌冬面。50种以上菜单，咖喱乌冬最受欢迎。",
         maps: "https://maps.google.com/?q=創作うどん+ほしの+長居",
@@ -487,7 +541,6 @@
       {
         name: "パリーネ 長居店",
         category: "面包・咖啡",
-        area: "長居",
         address: "住吉区長居東3-1-29",
         description: "手工面包店。馅料和奶油全部自制，可堂食。长居站步行3分钟。",
         maps: "https://maps.google.com/?q=パリーネ+長居店",
@@ -496,7 +549,6 @@
       {
         name: "cafe glue",
         category: "面包・咖啡",
-        area: "長居",
         address: "住吉区長居東3-3-53",
         description: "长居公园旁的隐藏咖啡馆。手工蛋糕、夏威夷盖饭和简餐。",
         maps: "https://maps.google.com/?q=cafe+glue+長居",
@@ -505,16 +557,14 @@
       {
         name: "釜揚げうどん 一心",
         category: "乌冬・荞麦",
-        area: "長居",
         address: "住吉区長居東3-4-21",
-        description: "乌冬WEST百名店2024。现打现煮�的釜�的乌冬专门店，卖完即止（约13点）。",
+        description: "乌冬WEST百名店2024。现打现煮的釜扬乌冬专门店，卖完即止（约13点）。",
         maps: "https://maps.google.com/?q=釜揚げうどん+一心+長居",
         lat: 34.60800, lng: 135.51373
       },
       {
         name: "咖喱饂飩 たちばな",
         category: "乌冬・荞麦",
-        area: "長居",
         address: "住吉区長居東3-7-5",
         description: "石锅咖喱乌冬专门店。浓郁咖喱配Q弹乌冬，绝妙搭配。",
         maps: "https://maps.google.com/?q=咖喱饂飩+たちばな+長居",
@@ -523,16 +573,22 @@
       {
         name: "ホルモン本舗 長居店",
         category: "烤肉",
-        area: "長居",
         address: "住吉区長居東3-14-22",
         description: "新鲜内脏烤肉店。黑毛和牛上等肉全品1078日元。",
         maps: "https://maps.google.com/?q=ホルモン本舗+長居店",
         lat: 34.60702, lng: 135.51364
       },
       {
+        name: "五味八珍 長居店",
+        category: "中餐",
+        address: "住吉区長居東3-14-22",
+        description: "老牌町中华料理店。拉面・炒饭・定食，价格实惠量大。",
+        maps: "https://maps.google.com/?q=五味八珍+長居店",
+        lat: 34.60702, lng: 135.51364
+      },
+      {
         name: "中華そば かみなり雲呑",
         category: "拉面",
-        area: "長居",
         address: "住吉区長居東3-14-22",
         description: "拉面OSAKA百名店2025入选。肉馄饨・虾馄饨绝品。食べログ3.68。",
         maps: "https://maps.google.com/?q=中華そば+かみなり雲呑+長居",
@@ -541,17 +597,15 @@
       {
         name: "百十 我孫子筋店",
         category: "大阪烧",
-        area: "長居",
         address: "住吉区長居東3-15-26",
         description: "多年来深受当地人喜爱的大阪烧・文字烧店。",
         maps: "https://maps.google.com/?q=百十+我孫子筋店+長居",
         lat: 34.60573, lng: 135.51358
       },
-      // ============ 长居 西侧（JR站一侧） ============
+      // ============ 长居 西侧（JR站附近） ============
       {
         name: "又三郎",
         category: "烤肉",
-        area: "長居",
         address: "住吉区長居2-13-13",
         description: "食べログ百名店的熟成肉烤肉。黑毛和牛与熟成牛排绝品。",
         maps: "https://maps.google.com/?q=又三郎+大阪市住吉区長居",
@@ -560,177 +614,35 @@
       {
         name: "とんかつ本田",
         category: "炸猪排",
-        area: "長居",
         address: "住吉区長居2-12-10",
         description: "JR长居站西口步行1分钟的人气炸猪排店。午餐时段常满座。",
         maps: "https://maps.google.com/?q=とんかつ本田+長居",
         lat: 34.61186, lng: 135.51178
       },
       {
-        name: "くら寿司 長居店",
-        category: "寿司",
-        area: "長居",
-        address: "住吉区長居1-2-3",
-        description: "回转寿司连锁。食材新鲜性价比高。停车场57台。",
-        maps: "https://maps.google.com/?q=くら寿司+長居店",
-        lat: 34.61617, lng: 135.51434
+        name: "ぎょうざの満洲 JR長居駅店",
+        category: "中餐",
+        address: "住吉区長居2丁目",
+        description: "埼�的煎饺连锁名店。3割うまい(好吃三成)是口号。JR长居站内。",
+        maps: "https://maps.google.com/?q=ぎょうざの満洲+JR長居駅店",
+        lat: 34.61282, lng: 135.51201
       },
-      {
-        name: "不二屋",
-        category: "乌冬・荞麦",
-        area: "長居",
-        address: "住吉区長居西3-4-14",
-        description: "油渣咖喱乌冬名店。多次媒体报道。浓郁咖喱配油渣绝妙。",
-        maps: "https://maps.google.com/?q=不二屋+長居+うどん",
-        lat: 34.60754, lng: 135.50738
-      },
-      // ============ 长居公园・西田辺周边 ============
+      // ============ 长居公园周边 ============
       {
         name: "YANMAR MARCHÉ NAGAI",
         category: "美食广场",
-        area: "長居",
         address: "東住吉区長居公園1-1",
         description: "长居公园入口的美食广场。主打新鲜蔬菜料理，有露台座位。",
         maps: "https://maps.google.com/?q=YANMAR+MARCHE+NAGAI",
         lat: 34.60988, lng: 135.51522
       },
       {
-        name: "わっしょい MECHA 長居公園",
-        category: "拉面",
-        area: "長居",
-        address: "東住吉区長居公園付近",
-        description: "浓厚豚骨拉面人气集团。也有原创咖喱。",
-        maps: "https://maps.google.com/?q=わっしょい+MECHA+長居公園",
-        lat: 34.60944, lng: 135.52063
-      },
-      {
-        name: "札幌ラーメン みそ吟 長居公園店",
-        category: "拉面",
-        area: "長居",
-        address: "阿倍野区西田辺町2-5-4",
-        description: "正宗札幌味噌拉面。浓厚味噌汤头，冷天首选。",
-        maps: "https://maps.google.com/?q=みそ吟+長居公園店",
-        lat: 34.61736, lng: 135.51581
-      },
-      {
-        name: "くしよし 本店",
-        category: "串炸",
-        area: "長居",
-        address: "阿倍野区西田辺町2-1-23",
-        description: "炭火烧・串炸人气店。酥脆串炸非常好吃。",
-        maps: "https://maps.google.com/?q=くしよし+本店+西田辺",
-        lat: 34.61765, lng: 135.51483
-      },
-      // ============ 我孙子站周边 - 苅田7丁目（站北侧） ============
-      {
-        name: "中華そば 閃",
-        category: "拉面",
-        area: "あびこ",
-        address: "住吉区苅田7-6-15",
-        description: "清爽系中华荞麦面好评如潮。食べログ高分。我孙子站步行3分钟。",
-        maps: "https://maps.google.com/?q=中華そば+閃+あびこ",
-        lat: 34.59914, lng: 135.51483
-      },
-      {
-        name: "ガンジス 我孫子店",
-        category: "咖喱",
-        area: "あびこ",
-        address: "住吉区苅田7-4-23",
-        description: "正宗印度咖喱和坦都里料理。我孙子站步行2分钟。馕饼很好吃。",
-        maps: "https://maps.google.com/?q=ガンジス+我孫子店+大阪",
-        lat: 34.59861, lng: 135.51497
-      },
-      {
-        name: "肉のオカヤマ直売所",
-        category: "烤肉",
-        area: "あびこ",
-        address: "住吉区苅田7-3-10",
-        description: "精肉店直营BBQ。现买现烤，炸物外带也很丰富。",
-        maps: "https://maps.google.com/?q=肉のオカヤマ直売所+あびこ",
-        lat: 34.59817, lng: 135.51675
-      },
-      {
-        name: "ラマイ 大阪あびこ店",
-        category: "咖喱",
-        area: "あびこ",
-        address: "住吉区苅田7-12-5",
-        description: "北海道百名店汤咖喱。巴厘岛诞生、札幌成长的味道来到大阪。我孙子站步行1分钟。",
-        maps: "https://maps.google.com/?q=アジアンバーラマイ+大阪あびこ店",
-        lat: 34.59906, lng: 135.51346
-      },
-      // ============ 苅田5丁目（站附近・南侧） ============
-      {
-        name: "双琉",
-        category: "中餐",
-        area: "あびこ",
-        address: "住吉区苅田5-6-5",
-        description: "正宗四川豆瓣酱制作的麻婆豆腐超人气。我孙子站步行7分钟。",
-        maps: "https://maps.google.com/?q=中国小菜+双琉+あびこ",
-        lat: 34.59969, lng: 135.51714
-      },
-      {
-        name: "釈迦力 友 あびこ店",
-        category: "拉面",
-        area: "あびこ",
-        address: "住吉区苅田5-19-4",
-        description: "我孙子站步行2分钟的拉面店。浓厚二郎系人气。",
-        maps: "https://maps.google.com/?q=釈迦力+友+あびこ店",
-        lat: 34.60014, lng: 135.51355
-      },
-      {
-        name: "炭火焼鳥 とこ葉 あびこ店",
-        category: "烤鸡串",
-        area: "あびこ",
-        address: "住吉区苅田5-19-5",
-        description: "绝品伊势赤�的烤鸡串。讲究的串烧值得品尝。",
-        maps: "https://maps.google.com/?q=炭火焼鳥+とこ葉+あびこ店",
-        lat: 34.60005, lng: 135.51353
-      },
-      {
-        name: "松屋 あびこ店",
-        category: "定食・盖饭",
-        area: "あびこ",
-        address: "住吉区苅田5-19-17",
-        description: "牛肉饭・咖喱・定食。附设松乃家炸猪排。24小时营业。我孙子站步行1分钟。",
-        maps: "https://maps.google.com/?q=松屋+あびこ店+大阪",
-        lat: 34.59983, lng: 135.51305
-      },
-      {
-        name: "串揚げ あとわ あびこ店",
-        category: "串炸",
-        area: "あびこ",
-        address: "住吉区苅田9-15-39",
-        description: "我孙子站步行1分钟。串炸8本套餐1500日元。现炸酥脆。",
-        maps: "https://maps.google.com/?q=串揚げ+あとわ+あびこ店",
-        lat: 34.59802, lng: 135.51331
-      },
-      // ============ 苅田3丁目・我孙子 ============
-      {
         name: "すえ広",
         category: "炸猪排",
-        area: "あびこ",
         address: "住吉区苅田3-14-14",
         description: "深受当地人喜爱的炸猪排老店。盖不住盖子的炸猪排重是招牌。玄米山药定食也推荐。",
         maps: "https://maps.google.com/?q=すえ広+とんかつ+あびこ",
         lat: 34.60257, lng: 135.51388
-      },
-      {
-        name: "肉匠 牛虎 あびこ",
-        category: "烤肉",
-        area: "あびこ",
-        address: "住吉区我孫子東2-7-5",
-        description: "精肉店直营。黑毛和牛价格实惠。也有自助餐方案。",
-        maps: "https://maps.google.com/?q=肉匠+牛虎+あびこ",
-        lat: 34.59915, lng: 135.51259
-      },
-      {
-        name: "pipi aina",
-        category: "烤肉",
-        area: "あびこ",
-        address: "住吉区我孫子3-5-20",
-        description: "烤肉餐厅。午餐11:00-15:00、晚餐17:00-23:00。",
-        maps: "https://maps.google.com/?q=pipi+aina+我孫子+大阪",
-        lat: 34.60084, lng: 135.50797
       }
     ];
 
