@@ -377,9 +377,9 @@
     <h3>MAP</h3>
     <div id="mapContainer" class="pixel-border"></div>
     <div class="map-legend">
-      <span><span class="dot" style="background:#66ff66;"></span>公司</span>
+      <span><span class="dot" style="background:#4488ff;"></span>公司</span>
       <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
-      <span><span class="dot" style="background:#ffcc00;border-color:#ffcc00;"></span>今日推荐</span>
+      <span><span class="dot" style="background:#44ff44;"></span>今日推荐</span>
     </div>
   </div>
 
@@ -784,7 +784,6 @@
       const hunger = 50 + Math.floor(seededRandom(getDateSeed() + 99) * 50);
       document.getElementById('hungerBar').style.width = hunger + '%';
 
-      highlightOnMap(currentPickIdx);
     }
 
     function getCategories() {
@@ -885,7 +884,7 @@
       });
 
       // 公司标记
-      const companyIcon = createPixelIcon('#66ff66', 28);
+      const companyIcon = createPixelIcon('#4488ff', 28);
       const companyMarker = L.marker([34.6092340, 135.5132900], { icon: companyIcon, zIndexOffset: 500 }).addTo(map);
       companyMarker.bindPopup(`
         <div class="popup-name">公司</div>
@@ -906,7 +905,7 @@
         map.removeLayer(highlightMarker);
       }
 
-      const goldIcon = createPixelIcon('#ffcc00', 32);
+      const goldIcon = createPixelIcon('#44ff44', 32);
       highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
       highlightMarker.bindPopup(`
         <div class="popup-name">今日推荐 >> ${r.name}</div>
@@ -928,6 +927,7 @@
     renderFilters();
     renderList();
     initMap();
+    highlightOnMap(currentPickIdx);
   </script>
 </body>
 </html>
