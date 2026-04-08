@@ -376,7 +376,7 @@
     <h3>MAP</h3>
     <div id="mapContainer" class="pixel-border"></div>
     <div class="map-legend">
-      <span><span class="dot" style="background:#4488ff;"></span>公司/车站</span>
+      <span><span class="dot" style="background:#4488ff;"></span>车站</span>
       <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
       <span><span class="dot" style="background:#44ff44;"></span>今日推荐</span>
     </div>
@@ -777,12 +777,12 @@
         markers.push(marker);
       });
 
-      // 公司标记
+      // 车站标记
       const poiIcon = createPixelIcon('#4488ff', 28);
-      const companyMarker = L.marker([34.6092340, 135.5132900], { icon: poiIcon, zIndexOffset: 500 }).addTo(map);
-      companyMarker.bindPopup(`
-        <div class="popup-name">公司</div>
-        <div style="color:#999;font-size:0.65rem;">住吉区長居東4-11-25 タケ＆ハルビル第1</div>
+      const nagaiMarker = L.marker([34.6121, 135.5138], { icon: poiIcon, zIndexOffset: 500 }).addTo(map);
+      nagaiMarker.bindPopup(`
+        <div class="popup-name">长居站</div>
+        <div style="color:#999;font-size:0.65rem;">Osaka Metro 御堂筋線 長居駅</div>
       `, { className: 'pixel-popup' });
 
       // 我孙子站标记
@@ -793,7 +793,7 @@
       `, { className: 'pixel-popup' });
 
       // 显示所有标记的范围
-      const allMarkers = [...markers, companyMarker, abikoMarker];
+      const allMarkers = [...markers, nagaiMarker, abikoMarker];
       const group = new L.featureGroup(allMarkers);
       map.fitBounds(group.getBounds().pad(0.1));
     }
