@@ -909,22 +909,18 @@
     }
 
     // === 地图 ===
-    // 餐馆标记：小菱形（紧凑，减少重叠）
-    function createDiamondIcon(color, size) {
+    // 餐馆标记：小圆形（紧凑，减少重叠）
+    function createCircleIcon(color, size) {
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext('2d');
       const cx = size / 2;
       const cy = size / 2;
-      const r = size * 0.4;
+      const r = size * 0.35;
 
       ctx.beginPath();
-      ctx.moveTo(cx, cy - r);
-      ctx.lineTo(cx + r, cy);
-      ctx.lineTo(cx, cy + r);
-      ctx.lineTo(cx - r, cy);
-      ctx.closePath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
       ctx.strokeStyle = '#000';
@@ -1015,12 +1011,12 @@
         attribution: '&copy; OpenStreetMap &copy; CARTO'
       }).addTo(map);
 
-      const closedIcon = createDiamondIcon('#555555', 16);
+      const closedIcon = createCircleIcon('#555555', 16);
 
       restaurants.forEach((r, i) => {
         const closed = isClosedToday(r);
         const ratingColor = getRatingInfo(r.rating).color;
-        const icon = closed ? closedIcon : createDiamondIcon(ratingColor, 16);
+        const icon = closed ? closedIcon : createCircleIcon(ratingColor, 16);
         const marker = L.marker([r.lat, r.lng], { icon: icon }).addTo(map);
 
         marker.bindPopup(`
