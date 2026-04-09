@@ -948,12 +948,12 @@
         attribution: '&copy; OpenStreetMap &copy; CARTO'
       }).addTo(map);
 
-      const defaultIcon = createPixelIcon('#ff4444', 24);
       const closedIcon = createPixelIcon('#555555', 24);
 
       restaurants.forEach((r, i) => {
         const closed = isClosedToday(r);
-        const icon = closed ? closedIcon : defaultIcon;
+        const ratingColor = getRatingInfo(r.rating).color;
+        const icon = closed ? closedIcon : createPixelIcon(ratingColor, 24);
         const marker = L.marker([r.lat, r.lng], { icon: icon }).addTo(map);
 
         marker.bindPopup(`
@@ -966,8 +966,8 @@
         markers.push(marker);
       });
 
-      // 车站标记
-      const poiIcon = createPixelIcon('#4488ff', 28);
+      // 车站标记（青色，区别于评分等级颜色）
+      const poiIcon = createPixelIcon('#00cccc', 28);
       const nagaiMarker = L.marker([34.6092340, 135.5132900], { icon: poiIcon, zIndexOffset: 500 }).addTo(map);
       nagaiMarker.bindPopup(`
         <div class="popup-name">长居站</div>
@@ -995,7 +995,7 @@
         map.removeLayer(highlightMarker);
       }
 
-      const goldIcon = createPixelIcon('#44ff44', 32);
+      const goldIcon = createPixelIcon('#ff66aa', 32);
       highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
       highlightMarker.bindPopup(`
         <div class="popup-name">${getCategoryEmoji(r.category)} 今日推荐 >> ${r.name}</div>
