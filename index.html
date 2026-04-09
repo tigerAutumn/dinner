@@ -909,25 +909,92 @@
     }
 
     // === 地图 ===
-    function createPixelIcon(color, size) {
+    // 餐馆标记：小菱形（紧凑，减少重叠）
+    function createDiamondIcon(color, size) {
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext('2d');
-      const px = Math.floor(size / 8);
-      const cx = Math.floor(size / 2);
-      const cy = Math.floor(size / 2);
+      const cx = size / 2;
+      const cy = size / 2;
+      const r = size * 0.4;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - r);
+      ctx.lineTo(cx + r, cy);
+      ctx.lineTo(cx, cy + r);
+      ctx.lineTo(cx - r, cy);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      return L.icon({
+        iconUrl: canvas.toDataURL(),
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
+        popupAnchor: [0, -size / 2]
+      });
+    }
+
+    // 地铁站标记：方块
+    function createSquareIcon(color, size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const pad = size * 0.2;
 
       ctx.fillStyle = color;
-      ctx.fillRect(cx - px, cy - px, px * 2, px * 2);
-      ctx.fillRect(cx - px, cy - px * 3, px * 2, px * 2);
-      ctx.fillRect(cx - px, cy + px, px * 2, px * 2);
-      ctx.fillRect(cx - px * 3, cy - px, px * 2, px * 2);
-      ctx.fillRect(cx + px, cy - px, px * 2, px * 2);
-
+      ctx.fillRect(pad, pad, size - pad * 2, size - pad * 2);
       ctx.strokeStyle = '#000';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(cx - px, cy - px, px * 2, px * 2);
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(pad, pad, size - pad * 2, size - pad * 2);
+
+      // 中间画个"M"表示Metro
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${Math.floor(size * 0.4)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('M', size / 2, size / 2);
+
+      return L.icon({
+        iconUrl: canvas.toDataURL(),
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
+        popupAnchor: [0, -size / 2]
+      });
+    }
+
+    // 推荐标记：星形（醒目）
+    function createStarIcon(color, size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const cx = size / 2;
+      const cy = size / 2;
+      const outerR = size * 0.45;
+      const innerR = size * 0.2;
+      const spikes = 5;
+
+      ctx.beginPath();
+      for (let i = 0; i < spikes * 2; i++) {
+        const r = i % 2 === 0 ? outerR : innerR;
+        const angle = (Math.PI * i / spikes) - Math.PI / 2;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
 
       return L.icon({
         iconUrl: canvas.toDataURL(),
@@ -948,12 +1015,12 @@
         attribution: '&copy; OpenStreetMap &copy; CARTO'
       }).addTo(map);
 
-      const closedIcon = createPixelIcon('#555555', 24);
+      const closedIcon = createDiamondIcon('#555555', 16);
 
       restaurants.forEach((r, i) => {
         const closed = isClosedToday(r);
         const ratingColor = getRatingInfo(r.rating).color;
-        const icon = closed ? closedIcon : createPixelIcon(ratingColor, 24);
+        const icon = closed ? closedIcon : createDiamondIcon(ratingColor, 16);
         const marker = L.marker([r.lat, r.lng], { icon: icon }).addTo(map);
 
         marker.bindPopup(`
@@ -966,8 +1033,8 @@
         markers.push(marker);
       });
 
-      // 车站标记（青色，区别于评分等级颜色）
-      const poiIcon = createPixelIcon('#00cccc', 28);
+      // 车站标记（青色方块带M标识）
+      const poiIcon = createSquareIcon('#00cccc', 26);
       const nagaiMarker = L.marker([34.6092340, 135.5132900], { icon: poiIcon, zIndexOffset: 500 }).addTo(map);
       nagaiMarker.bindPopup(`
         <div class="popup-name">长居站</div>
@@ -995,7 +1062,7 @@
         map.removeLayer(highlightMarker);
       }
 
-      const goldIcon = createPixelIcon('#ff66aa', 32);
+      const goldIcon = createStarIcon('#ff66aa', 36);
       highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
       highlightMarker.bindPopup(`
         <div class="popup-name">${getCategoryEmoji(r.category)} 今日推荐 >> ${r.name}</div>
