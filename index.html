@@ -1029,13 +1029,15 @@
       }).addTo(map);
 
       const defaultIcon = createPixelIcon('#ff4444', 24);
+      const closedIcon = createPixelIcon('#555555', 24);
 
       restaurants.forEach((r, i) => {
-        const icon = defaultIcon;
+        const closed = isClosedToday(r);
+        const icon = closed ? closedIcon : defaultIcon;
         const marker = L.marker([r.lat, r.lng], { icon: icon }).addTo(map);
 
         marker.bindPopup(`
-          <div class="popup-name">${getCategoryEmoji(r.category)} ${r.name}</div>
+          <div class="popup-name">${getCategoryEmoji(r.category)} ${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.65rem;">定休</span>' : ''}</div>
           <div class="popup-cat" style="color:${getRatingInfo(r.rating).color};">${r.rating > 0 ? getRatingInfo(r.rating).label + ' ' + r.rating : getRatingInfo(r.rating).label} | ${r.category}</div>
           <div style="color:#c4bfb4;font-size:0.65rem;margin-top:2px;">${r.description}</div>
           <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
