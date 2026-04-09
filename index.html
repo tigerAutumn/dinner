@@ -520,7 +520,7 @@
         description: "韩国人气炸鸡专门店。多种口味酱料可选。",
         hours: "营业时间请确认", closed: [],
         maps: "https://maps.google.com/?q=NENE+CHICKEN+長居駅前店",
-        rating: 3.00,
+        rating: 0,
         lat: 34.61047, lng: 135.51356
       },
       {
@@ -729,7 +729,7 @@
         description: "越南米粉专门店。回家路上的东南亚风味。",
         hours: "营业时间请确认", closed: [],
         maps: "https://maps.google.com/?q=凛空+LINK+長居東",
-        rating: 3.00,
+        rating: 0,
         lat: 34.60683, lng: 135.51416
       },
       {
@@ -747,7 +747,7 @@
         description: "正宗越南法棍三明治(バインミー)和越南河粉(フォー)。长居站步行5分钟。",
         hours: "10:00-18:00", closed: [2], // 周二
         maps: "https://maps.google.com/?q=ベトナムカフェ+1968+長居",
-        rating: 3.00,
+        rating: 0,
         lat: 34.61186, lng: 135.51094
       },
       {
@@ -860,12 +860,13 @@
 
     // RPG装备等级评分系统
     function getRatingInfo(rating) {
+      if (rating <= 0) return { label: '? 未鉴定', color: '#ffcc00', bg: '#2a2a00' };
       if (rating >= 3.70) return { label: '传说', color: '#ff8800', bg: '#3d2200' };
       if (rating >= 3.50) return { label: '史诗', color: '#cc44ff', bg: '#2a0033' };
       if (rating >= 3.40) return { label: '稀有', color: '#4488ff', bg: '#001a3d' };
       if (rating >= 3.20) return { label: '优秀', color: '#44ff44', bg: '#003300' };
       if (rating >= 3.00) return { label: '普通', color: '#aaaaaa', bg: '#222222' };
-      return { label: '未知', color: '#666666', bg: '#1a1a1a' };
+      return { label: '? 未鉴定', color: '#ffcc00', bg: '#2a2a00' };
     }
 
     function renderCard() {
@@ -876,7 +877,7 @@
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
-        <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${ri.label} ${r.rating}</span>
+        <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
         <h2>${r.name}</h2>
         <p class="description">${r.description}</p>
         <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
@@ -923,7 +924,7 @@
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
-              <span class="tag" style="color:${ri.color};border-color:${ri.color};">${ri.label} ${r.rating}</span>
+              <span class="tag" style="color:${ri.color};border-color:${ri.color};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
               <span class="tag" style="margin-top:4px;display:block;">${r.category}</span>
             </div>
           </div>`;
