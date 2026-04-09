@@ -865,6 +865,16 @@
         maps: "https://maps.app.goo.gl/CCLUU8v3dpy2SR9A9",
         rating: 3.27,
         lat: 34.60395, lng: 135.51390
+      },
+      // ============ 長居東2丁目 ============
+      {
+        name: "マクドナルド 長居公園通り店", category: "快餐",
+        address: "住吉区長居東2-1-32",
+        description: "長居公園通り沿いの24時間マクドナルド。ドライブスルーあり。",
+        hours: "24時間（金曜 5:00-24:00）", closed: [],
+        maps: "https://maps.app.goo.gl/MFTZBiRTiXarnFWZ8",
+        rating: 3.04,
+        lat: 34.60924, lng: 135.51988
       }
     ];
 
@@ -887,14 +897,18 @@
 
     function getDailyPick() {
       const seed = getDateSeed();
+      const jst = getJST();
+      const isSunday = jst.getUTCDay() === 0;
+      // 周日和非周日使用不同种子，推荐不同的店
+      const finalSeed = isSunday ? seed + 77777 : seed;
       // 所有人看到同一个推荐（纯按日期随机），跳过定休日
       for (let offset = 0; offset < restaurants.length; offset++) {
-        const idx = Math.floor(seededRandom(seed + offset) * restaurants.length);
+        const idx = Math.floor(seededRandom(finalSeed + offset) * restaurants.length);
         if (!isClosedToday(restaurants[idx])) {
           return idx;
         }
       }
-      return Math.floor(seededRandom(seed) * restaurants.length);
+      return Math.floor(seededRandom(finalSeed) * restaurants.length);
     }
 
     let currentPickIdx = 0;
