@@ -178,6 +178,7 @@
 
     .card .food-icon {
       margin: 0.8rem 0;
+      font-size: 3rem;
     }
 
     .card .hours-info {
@@ -886,193 +887,16 @@
       return { label: '? 未鉴定', color: '#ffcc00', bg: '#2a2a00' };
     }
 
-    // 像素风食物图标（8x8 pixel art）
-    const foodIcons = {
-      '拉面': [
-        '..1111..',
-        '.111111.',
-        '22222222',
-        '2.3.3.32',
-        '22322322',
-        '.222222.',
-        '..2332..',
-        '..2222..',
-      ],
-      '咖喱': [
-        '..1111..',
-        '.111111.',
-        '22222222',
-        '24242422',
-        '22424242',
-        '.222222.',
-        '..2222..',
-        '...22...',
-      ],
-      '定食・盖饭': [
-        '.111111.',
-        '11555511',
-        '15555551',
-        '15335351',
-        '15555551',
-        '11555511',
-        '.111111.',
-        '...11...',
-      ],
-      '中餐': [
-        '....1...',
-        '...1.1..',
-        '22222222',
-        '2.3.3.32',
-        '22232232',
-        '.222222.',
-        '..2332..',
-        '..2..2..',
-      ],
-      '快餐': [
-        '..4444..',
-        '.444444.',
-        '55555555',
-        '53535355',
-        '55555555',
-        '.444444.',
-        '44444444',
-        '........',
-      ],
-      '烤肉': [
-        '..6..6..',
-        '.66..66.',
-        '...66...',
-        '..6336..',
-        '.633336.',
-        '63333336',
-        '.633336.',
-        '..3333..',
-      ],
-      '章鱼烧': [
-        '........',
-        '.33..33.',
-        '3333.333',
-        '.333333.',
-        '.333333.',
-        '3333.333',
-        '.33..33.',
-        '........',
-      ],
-      '西餐': [
-        '...11...',
-        '..1111..',
-        '.111111.',
-        '11155111',
-        '11555511',
-        '.115511.',
-        '..1111..',
-        '...11...',
-      ],
-      '大阪烧': [
-        '........',
-        '.222222.',
-        '24242422',
-        '22424242',
-        '24242422',
-        '22424242',
-        '.222222.',
-        '........',
-      ],
-      '印度料理': [
-        '..4444..',
-        '.442244.',
-        '44422444',
-        '44222244',
-        '44422444',
-        '.442244.',
-        '..4444..',
-        '...22...',
-      ],
-      '乌冬・荞麦': [
-        '..1111..',
-        '.111111.',
-        '22222222',
-        '2.1.1.12',
-        '21.1.112',
-        '.222222.',
-        '..2332..',
-        '..2..2..',
-      ],
-      '炸猪排': [
-        '........',
-        '.444444.',
-        '43434344',
-        '44343434',
-        '43434344',
-        '44343434',
-        '.444444.',
-        '........',
-      ],
-      '寿司': [
-        '........',
-        '..3333..',
-        '.333333.',
-        '33333333',
-        '55555555',
-        '15555551',
-        '.111111.',
-        '........',
-      ],
-      '越南料理': [
-        '..1111..',
-        '.111111.',
-        '22222222',
-        '2.1.1.22',
-        '22616122',
-        '.222222.',
-        '..2332..',
-        '..2..2..',
-      ],
-      '韩国料理': [
-        '.111111.',
-        '12222221',
-        '12332231',
-        '12233321',
-        '12332231',
-        '12222221',
-        '.111111.',
-        '...11...',
-      ],
-      '炸鸡': [
-        '...44...',
-        '..4444..',
-        '.443344.',
-        '44433444',
-        '44433444',
-        '.443344.',
-        '..4334..',
-        '...33...',
-      ],
-    };
-
-    const iconPalette = {
-      '1': '#ffffff', '2': '#aaaaaa', '3': '#ff6666',
-      '4': '#ffcc00', '5': '#44ff44', '6': '#66aaff',
-    };
-
-    function drawFoodIcon(category, size) {
-      const pixels = foodIcons[category] || foodIcons['定食・盖饭'];
-      const canvas = document.createElement('canvas');
-      const grid = 8;
-      const px = Math.floor(size / grid);
-      canvas.width = px * grid;
-      canvas.height = px * grid;
-      const ctx = canvas.getContext('2d');
-      for (let y = 0; y < grid; y++) {
-        for (let x = 0; x < grid; x++) {
-          const ch = pixels[y][x];
-          if (ch !== '.') {
-            ctx.fillStyle = iconPalette[ch] || '#ffffff';
-            ctx.fillRect(x * px, y * px, px, px);
-          }
-        }
-      }
-      return canvas.toDataURL();
+    function getCategoryEmoji(category) {
+      const map = {
+        '拉面': '🍜', '咖喱': '🍛', '定食・盖饭': '🍱',
+        '中餐': '🥟', '快餐': '🍔', '烤肉': '🥩',
+        '章鱼烧': '🐙', '西餐': '🍽️', '大阪烧': '🥞',
+        '印度料理': '🫓', '乌冬・荞麦': '🍝', '炸猪排': '🍖',
+        '寿司': '🍣', '越南料理': '🍲', '韩国料理': '🥘',
+        '炸鸡': '🍗',
+      };
+      return map[category] || '🍴';
     }
 
     function renderCard() {
@@ -1080,12 +904,12 @@
       const r = restaurants[currentPickIdx];
       const closedText = getClosedText(r);
       const ri = getRatingInfo(r.rating);
-      const iconSrc = drawFoodIcon(r.category, 64);
+      const emoji = getCategoryEmoji(r.category);
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
         <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
-        <div class="food-icon"><img src="${iconSrc}" alt="${r.category}" style="image-rendering:pixelated;width:64px;height:64px;"></div>
+        <div class="food-icon">${emoji}</div>
         <h2>${r.name}</h2>
         <p class="description">${r.description}</p>
         <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
@@ -1126,10 +950,10 @@
       list.innerHTML = filtered.map((r, i) => {
         const ri = getRatingInfo(r.rating);
         const closed = isClosedToday(r);
-        const iconSrc = drawFoodIcon(r.category, 24);
+        const emoji = getCategoryEmoji(r.category);
         return `
           <div class="restaurant-item${closed ? ' closed-today' : ''}" onclick="focusMarker(${restaurants.indexOf(r)})">
-            <img src="${iconSrc}" style="image-rendering:pixelated;width:24px;height:24px;flex-shrink:0;margin-right:0.5rem;">
+            <span style="font-size:1.2rem;flex-shrink:0;margin-right:0.5rem;">${emoji}</span>
             <div class="info" style="flex:1;min-width:0;">
               <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
