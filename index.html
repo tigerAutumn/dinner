@@ -1126,9 +1126,11 @@
       list.innerHTML = filtered.map((r, i) => {
         const ri = getRatingInfo(r.rating);
         const closed = isClosedToday(r);
+        const iconSrc = drawFoodIcon(r.category, 24);
         return `
           <div class="restaurant-item${closed ? ' closed-today' : ''}" onclick="focusMarker(${restaurants.indexOf(r)})">
-            <div class="info">
+            <img src="${iconSrc}" style="image-rendering:pixelated;width:24px;height:24px;flex-shrink:0;margin-right:0.5rem;">
+            <div class="info" style="flex:1;min-width:0;">
               <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
