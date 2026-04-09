@@ -897,25 +897,6 @@
     };
 
     // 把emoji画到小Canvas再放大 → 像素化效果
-    const pixelEmojiCache = {};
-    function getPixelEmoji(category, displaySize) {
-      const key = category + displaySize;
-      if (pixelEmojiCache[key]) return pixelEmojiCache[key];
-      const emoji = emojiMap[category] || '🍴';
-      const tiny = 12; // 先画到12px小画布
-      const canvas = document.createElement('canvas');
-      canvas.width = tiny;
-      canvas.height = tiny;
-      const ctx = canvas.getContext('2d');
-      ctx.font = `${tiny - 2}px serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(emoji, tiny / 2, tiny / 2 + 1);
-      const src = canvas.toDataURL();
-      pixelEmojiCache[key] = src;
-      return src;
-    }
-
     function getCategoryEmoji(category) {
       return emojiMap[category] || '🍴';
     }
@@ -925,12 +906,12 @@
       const r = restaurants[currentPickIdx];
       const closedText = getClosedText(r);
       const ri = getRatingInfo(r.rating);
-      const iconSrc = getPixelEmoji(r.category, 64);
+      const emoji = getCategoryEmoji(r.category);
 
       document.getElementById('cardContent').innerHTML = `
         <span class="category">${r.category}</span>
         <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
-        <div class="food-icon"><img src="${iconSrc}" style="image-rendering:pixelated;width:64px;height:64px;"></div>
+        <div class="food-icon">${emoji}</div>
         <h2>${r.name}</h2>
         <p class="description">${r.description}</p>
         <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
@@ -971,10 +952,10 @@
       list.innerHTML = filtered.map((r, i) => {
         const ri = getRatingInfo(r.rating);
         const closed = isClosedToday(r);
-        const iconSrc = getPixelEmoji(r.category, 24);
+        const emoji = getCategoryEmoji(r.category);
         return `
           <div class="restaurant-item${closed ? ' closed-today' : ''}" onclick="focusMarker(${restaurants.indexOf(r)})">
-            <img src="${iconSrc}" style="image-rendering:pixelated;width:24px;height:24px;flex-shrink:0;margin-right:0.5rem;">
+            <span style="font-size:1.2rem;flex-shrink:0;margin-right:0.5rem;">${emoji}</span>
             <div class="info" style="flex:1;min-width:0;">
               <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
