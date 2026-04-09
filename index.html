@@ -224,13 +224,13 @@
     .pixel-popup .leaflet-popup-content-wrapper {
       background: #1a1a2e;
       color: #cccccc;
-      border: 3px solid #ffcc00;
+      border: 3px solid var(--popup-color, #ffcc00);
       border-radius: 0;
       font-family: 'DotGothic16', monospace;
       box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
     }
 
-    .pixel-popup .leaflet-popup-tip { background: #ffcc00; }
+    .pixel-popup .leaflet-popup-tip { background: var(--popup-color, #ffcc00); }
 
     .pixel-popup .leaflet-popup-content {
       margin: 8px 12px;
@@ -239,7 +239,7 @@
     }
 
     .pixel-popup .popup-name {
-      color: #ffcc00;
+      color: var(--popup-color, #ffcc00);
       font-size: 0.85rem;
       margin-bottom: 4px;
     }
@@ -338,7 +338,7 @@
     }
 
     .restaurant-item:hover {
-      border-color: #ffcc00;
+      border-color: var(--rating-color, #ffcc00);
     }
 
     .restaurant-item.closed-today {
@@ -348,7 +348,7 @@
     .restaurant-item .info h4 {
       font-size: 0.8rem;
       margin-bottom: 0.2rem;
-      color: #ffffff;
+      color: var(--rating-color, #ffffff);
     }
 
     .restaurant-item .info span {
@@ -894,7 +894,7 @@
         const closed = isClosedToday(r);
         const emoji = getCategoryEmoji(r.category);
         return `
-          <div class="restaurant-item${closed ? ' closed-today' : ''}" onclick="focusMarker(${restaurants.indexOf(r)})">
+          <div class="restaurant-item${closed ? ' closed-today' : ''}" style="--rating-color:${ri.color};" onclick="focusMarker(${restaurants.indexOf(r)})">
             <span style="font-size:1.2rem;flex-shrink:0;margin-right:0.5rem;">${emoji}</span>
             <div class="info" style="flex:1;min-width:0;">
               <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
@@ -1021,10 +1021,13 @@
 
         marker.bindPopup(`
           <div class="popup-name">${getCategoryEmoji(r.category)} ${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.65rem;">定休</span>' : ''}</div>
-          <div class="popup-cat" style="color:${getRatingInfo(r.rating).color};">${r.rating > 0 ? getRatingInfo(r.rating).label + ' ' + r.rating : getRatingInfo(r.rating).label} | ${r.category}</div>
+          <div class="popup-cat" style="color:${ratingColor};">${r.rating > 0 ? getRatingInfo(r.rating).label + ' ' + r.rating : getRatingInfo(r.rating).label} | ${r.category}</div>
           <div style="color:#c4bfb4;font-size:0.65rem;margin-top:2px;">${r.description}</div>
           <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
         `, { className: 'pixel-popup', maxWidth: 250 });
+        marker.on('popupopen', () => {
+          marker.getPopup().getElement().style.setProperty('--popup-color', ratingColor);
+        });
 
         markers.push(marker);
       });
@@ -1058,14 +1061,16 @@
         map.removeLayer(highlightMarker);
       }
 
+      const ratingColor = getRatingInfo(r.rating).color;
       const goldIcon = createStarIcon('#ff66aa', 36);
       highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
       highlightMarker.bindPopup(`
         <div class="popup-name">${getCategoryEmoji(r.category)} 今日推荐 >> ${r.name}</div>
-        <div class="popup-cat" style="color:${getRatingInfo(r.rating).color};">${r.rating > 0 ? getRatingInfo(r.rating).label + ' ' + r.rating : getRatingInfo(r.rating).label} | ${r.category}</div>
+        <div class="popup-cat" style="color:${ratingColor};">${r.rating > 0 ? getRatingInfo(r.rating).label + ' ' + r.rating : getRatingInfo(r.rating).label} | ${r.category}</div>
         <div style="color:#c4bfb4;font-size:0.65rem;margin-top:2px;">${r.description}</div>
         <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
       `, { className: 'pixel-popup', maxWidth: 250 }).openPopup();
+      highlightMarker.getPopup().getElement().style.setProperty('--popup-color', ratingColor);
     }
 
     // 鼠标悬停列表项时在地图上显示对应的popup
