@@ -106,21 +106,16 @@
     }
 
     .card-title {
-      padding: 0.5rem 1rem;
       text-align: center;
-      font-size: 0.85rem;
-      letter-spacing: 3px;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      border-bottom: 2px solid;
+      padding: 1rem 1rem 0.5rem;
     }
 
-    .card-title .shimmer {
-      position: absolute;
-      top: 0; left: -100%; width: 50%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-      animation: shimmer 3s infinite;
+    .card-title h1 {
+      font-size: 1.5rem;
+      color: #ffcc00;
+      text-shadow: 2px 2px 0 #b07820, 4px 4px 0 #0f0f23;
+      letter-spacing: 2px;
+      animation: blink 2s infinite;
     }
 
     .card {
@@ -394,7 +389,7 @@
 <body>
   <div class="main-layout">
     <div class="left-panel">
-      <div class="card-title" id="cardTitle"></div>
+      <div class="card-title"><h1>今日推荐</h1></div>
       <div class="card pixel-border" id="mainCard">
         <div id="cardContent"></div>
       </div>
@@ -894,14 +889,6 @@
       const card = document.getElementById('mainCard');
       card.style.borderColor = ri.color;
       card.style.boxShadow = `4px 0 0 0 ${ri.color},-4px 0 0 0 ${ri.color},0 4px 0 0 ${ri.color},0 -4px 0 0 ${ri.color}`;
-
-      document.getElementById('cardTitle').innerHTML = `
-        <span class="shimmer"></span>
-        今日推荐
-      `;
-      document.getElementById('cardTitle').style.background = ri.bg;
-      document.getElementById('cardTitle').style.color = ri.color;
-      document.getElementById('cardTitle').style.borderColor = ri.color;
 
       document.getElementById('cardContent').innerHTML = `
         <div class="card-body">
