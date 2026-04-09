@@ -859,30 +859,16 @@
 
     function getDailyPick() {
       const seed = getDateSeed();
-      let bestIdx = -1;
-      let bestDays = -1;
-
-      // 尝试多次，优先选最近7天没吃过且今天不定休的店
+      // 所有人看到同一个推荐（纯按日期随机），跳过定休日
       for (let offset = 0; offset < restaurants.length; offset++) {
         const idx = Math.floor(seededRandom(seed + offset) * restaurants.length);
-        if (isClosedToday(restaurants[idx])) continue;
-        const days = daysSinceEaten(restaurants[idx].name);
-        if (days >= 7) {
-          // 7天没吃过，直接选
-          bestIdx = idx;
-          break;
-        }
-        if (days > bestDays) {
-          bestDays = days;
-          bestIdx = idx;
+        if (!isClosedToday(restaurants[idx])) {
+          // 自动记录到个人历史
+          saveEatHistory(restaurants[idx].name);
+          return idx;
         }
       }
-
-      if (bestIdx === -1) bestIdx = Math.floor(seededRandom(seed) * restaurants.length);
-
-      // 自动记录今天推荐的店
-      saveEatHistory(restaurants[bestIdx].name);
-      return bestIdx;
+      return Math.floor(seededRandom(seed) * restaurants.length);
     }
 
     let currentPickIdx = 0;
