@@ -104,13 +104,17 @@
       }
     }
 
+    .top-spacer {
+      height: 2rem;
+    }
+
     .card-title {
       text-align: center;
-      padding: 1.2rem 1rem;
+      padding: 0.8rem 1rem;
     }
 
     .card-title h1 {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: #ff6688;
       text-shadow: 2px 2px 0 #882244, 4px 4px 0 #0f0f23;
       letter-spacing: 6px;
@@ -386,11 +390,12 @@
   </style>
 </head>
 <body>
-  <div class="card-title"><h1>今日推荐</h1></div>
+  <div class="top-spacer"></div>
 
   <div class="main-layout">
     <div class="left-panel">
       <div class="card pixel-border" id="mainCard">
+        <div class="card-title"><h1>今日推荐</h1></div>
         <div id="cardContent"></div>
       </div>
 
