@@ -349,6 +349,10 @@
       border-color: #ffcc00;
     }
 
+    .restaurant-item.closed-today {
+      opacity: 0.4;
+    }
+
     .restaurant-item .info h4 {
       font-size: 0.8rem;
       margin-bottom: 0.2rem;
@@ -925,15 +929,16 @@
 
       list.innerHTML = filtered.map((r, i) => {
         const ri = getRatingInfo(r.rating);
+        const closed = isClosedToday(r);
         return `
-          <div class="restaurant-item" onclick="focusMarker(${restaurants.indexOf(r)})">
+          <div class="restaurant-item${closed ? ' closed-today' : ''}" onclick="focusMarker(${restaurants.indexOf(r)})">
             <div class="info">
-              <h4 style="color:${ri.color};">${r.name}</h4>
+              <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
-              <span class="tag" style="color:${ri.color};border-color:${ri.color};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
-              <span class="tag" style="margin-top:4px;display:block;">${r.category}</span>
+              <span class="tag" style="color:${closed ? '#555' : ri.color};border-color:${closed ? '#333' : ri.color};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
+              <span class="tag" style="margin-top:4px;display:block;${closed ? 'color:#555;border-color:#333;' : ''}">${r.category}</span>
             </div>
           </div>`;
       }).join('');
