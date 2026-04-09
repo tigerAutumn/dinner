@@ -66,10 +66,13 @@
         height: calc(100vh - 6rem);
       }
       .left-panel {
-        flex: 0 0 360px;
+        flex: 0 0 400px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
+      }
+      .left-panel .card {
+        flex-shrink: 0;
       }
       .left-panel .list-section {
         flex: 1 0 0;
@@ -97,23 +100,7 @@
       .right-panel {
         flex: 1;
         min-width: 0;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      .right-panel .card-title,
-      .right-panel .card {
-        flex-shrink: 0;
-      }
-      .right-panel .map-section {
-        flex: 1;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .right-panel .map-section #mapContainer {
-        flex: 1;
-        min-height: 0;
+        height: 100%;
       }
     }
 
@@ -399,8 +386,14 @@
   </style>
 </head>
 <body>
+  <div class="card-title"><h1>今日推荐</h1></div>
+
   <div class="main-layout">
     <div class="left-panel">
+      <div class="card pixel-border" id="mainCard">
+        <div id="cardContent"></div>
+      </div>
+
       <div class="list-section">
     <h3>全部店铺（<span id="totalCount"></span>家）<span style="font-size:0.55rem;color:#666;margin-left:0.5rem;">评分来源：食べログ</span></h3>
     <div class="filter-bar" id="filterBar"></div>
@@ -409,10 +402,6 @@
     </div><!-- left-panel -->
 
     <div class="right-panel">
-      <div class="card-title"><h1>今日推荐</h1></div>
-      <div class="card pixel-border" id="mainCard">
-        <div id="cardContent"></div>
-      </div>
       <div class="map-section">
         <div id="mapContainer" class="pixel-border"></div>
         <div class="map-legend">
