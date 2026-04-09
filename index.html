@@ -834,37 +834,12 @@
       return new Date(now.getTime() + (9 * 60 * 60 * 1000));
     }
 
-    // 吃过的店记录
-    function getEatHistory() {
-      return JSON.parse(localStorage.getItem('eatHistory') || '{}');
-    }
-
-    function saveEatHistory(name) {
-      const history = getEatHistory();
-      const jst = getJST();
-      const dateStr = `${jst.getUTCFullYear()}-${String(jst.getUTCMonth()+1).padStart(2,'0')}-${String(jst.getUTCDate()).padStart(2,'0')}`;
-      history[name] = dateStr;
-      localStorage.setItem('eatHistory', JSON.stringify(history));
-    }
-
-    // 距上次吃的天数（没吃过返回999）
-    function daysSinceEaten(name) {
-      const history = getEatHistory();
-      if (!history[name]) return 999;
-      const jst = getJST();
-      const today = new Date(jst.getUTCFullYear(), jst.getUTCMonth(), jst.getUTCDate());
-      const last = new Date(history[name]);
-      return Math.floor((today - last) / 86400000);
-    }
-
     function getDailyPick() {
       const seed = getDateSeed();
       // 所有人看到同一个推荐（纯按日期随机），跳过定休日
       for (let offset = 0; offset < restaurants.length; offset++) {
         const idx = Math.floor(seededRandom(seed + offset) * restaurants.length);
         if (!isClosedToday(restaurants[idx])) {
-          // 自动记录到个人历史
-          saveEatHistory(restaurants[idx].name);
           return idx;
         }
       }
@@ -960,7 +935,7 @@
           <div class="restaurant-item${closed ? ' closed-today' : ''}" onclick="focusMarker(${restaurants.indexOf(r)})">
             <div class="info">
               <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
-              <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}${daysSinceEaten(r.name) < 999 ? ' | <span style="color:#ff8800;">' + daysSinceEaten(r.name) + '天前吃过</span>' : ''}</span>
+              <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
               <span class="tag" style="color:${closed ? '#555' : ri.color};border-color:${closed ? '#333' : ri.color};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
