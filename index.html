@@ -71,6 +71,7 @@
         flex-direction: column;
         overflow: hidden;
       }
+      .left-panel .card-title,
       .left-panel .card {
         flex-shrink: 0;
       }
@@ -104,32 +105,29 @@
       }
     }
 
-    .card {
-      background: #1a1a2e;
-      padding: 0;
-      margin: 0 0 1rem;
-      overflow: hidden;
-    }
-
-    .card-header {
-      padding: 0.6rem 1rem;
+    .card-title {
+      padding: 0.5rem 1rem;
       text-align: center;
       font-size: 0.85rem;
       letter-spacing: 3px;
       position: relative;
       overflow: hidden;
+      margin-bottom: 0.5rem;
+      border-bottom: 2px solid;
     }
 
-    .card-header .shimmer {
+    .card-title .shimmer {
       position: absolute;
       top: 0; left: -100%; width: 50%; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
       animation: shimmer 3s infinite;
     }
 
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 200%; }
+    .card {
+      background: #1a1a2e;
+      padding: 0;
+      margin: 0 0 1rem;
+      overflow: hidden;
     }
 
     .card-body {
@@ -396,6 +394,7 @@
 <body>
   <div class="main-layout">
     <div class="left-panel">
+      <div class="card-title" id="cardTitle"></div>
       <div class="card pixel-border" id="mainCard">
         <div id="cardContent"></div>
       </div>
@@ -896,11 +895,15 @@
       card.style.borderColor = ri.color;
       card.style.boxShadow = `4px 0 0 0 ${ri.color},-4px 0 0 0 ${ri.color},0 4px 0 0 ${ri.color},0 -4px 0 0 ${ri.color}`;
 
+      document.getElementById('cardTitle').innerHTML = `
+        <span class="shimmer"></span>
+        今日推荐
+      `;
+      document.getElementById('cardTitle').style.background = ri.bg;
+      document.getElementById('cardTitle').style.color = ri.color;
+      document.getElementById('cardTitle').style.borderColor = ri.color;
+
       document.getElementById('cardContent').innerHTML = `
-        <div class="card-header" style="background:${ri.bg};color:${ri.color};border-bottom:2px solid ${ri.color};">
-          <span class="shimmer"></span>
-          今日推荐
-        </div>
         <div class="card-body">
           <span class="food-emoji">${emoji}</span>
           <h2 class="shop-name" style="color:${ri.color};">${r.name}</h2>
