@@ -47,23 +47,6 @@
       border-color: #e0a030;
     }
 
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1rem;
-    }
-
-    header h1 {
-      font-size: 1.5rem;
-      color: #ffcc00;
-      text-shadow: 2px 2px 0 #b07820, 4px 4px 0 #0f0f23;
-      letter-spacing: 2px;
-    }
-
-    header p {
-      color: #666;
-      margin-top: 0.8rem;
-      font-size: 0.8rem;
-    }
 
 
     /* 主布局：电脑端左右分栏 */
@@ -123,85 +106,92 @@
 
     .card {
       background: #1a1a2e;
-      padding: 1.5rem;
-      margin: 0 0 1.5rem;
+      padding: 0;
+      margin: 0 0 1rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 0.6rem 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-header .shimmer {
+      position: absolute;
+      top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    .card-body {
+      padding: 1rem 1.5rem 1.5rem;
       text-align: center;
     }
 
-    .card .category {
-      display: inline-block;
-      background: #442222;
-      color: #ff6666;
-      padding: 0.2rem 0.6rem;
-      font-size: 0.7rem;
-      margin-bottom: 0.8rem;
-      border: 2px solid #ff6666;
+    .card-body .food-emoji {
+      font-size: 4rem;
+      margin: 0.5rem 0;
+      display: block;
     }
 
-    .card h2 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      color: #ffffff;
+    .card-body .shop-name {
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
       text-shadow: 2px 2px 0 #333;
     }
 
-    .card .address {
-      color: #666;
-      font-size: 0.7rem;
+    .card-body .tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
       margin-bottom: 0.8rem;
+      flex-wrap: wrap;
     }
 
-    .card .description {
-      color: #999;
-      font-size: 0.75rem;
-      line-height: 1.8;
-      margin-bottom: 1.2rem;
-    }
-.card .rating-tag {
+    .card-body .tag-item {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
-      font-size: 0.7rem;
-      margin-left: 0.3rem;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.65rem;
       border: 2px solid;
     }
 
-    .card .closed-tag {
-      display: inline-block;
-      background: #442222;
-      color: #ff4444;
-      padding: 0.2rem 0.6rem;
-      font-size: 0.7rem;
-      margin-left: 0.3rem;
-      border: 2px solid #ff4444;
-      animation: blink 1.5s infinite;
+    .card-body .description {
+      color: #999;
+      font-size: 0.75rem;
+      line-height: 1.8;
+      margin-bottom: 0.8rem;
     }
 
-    .card .food-icon {
-      margin: 0.8rem 0;
-      font-size: 3rem;
-    }
-
-    .card .hours-info {
+    .card-body .hours-info {
       color: #888;
       font-size: 0.7rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       line-height: 1.6;
     }
 
-    .card .map-link {
+    .card-body .map-link {
       display: inline-block;
       background: #224488;
       color: #66aaff;
       text-decoration: none;
-      padding: 0.5rem 1rem;
-      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.7rem;
       font-family: 'DotGothic16', monospace;
       border: 2px solid #66aaff;
       cursor: pointer;
       transition: all 0.1s;
     }
 
-    .card .map-link:hover {
+    .card-body .map-link:hover {
       background: #66aaff;
       color: #0f0f23;
     }
@@ -382,9 +372,6 @@
       50% { opacity: 0.3; }
     }
 
-    .cursor-blink {
-      animation: blink 1s infinite;
-    }
 
     body::after {
       content: '';
@@ -407,13 +394,9 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>今晚吃什么<span class="cursor-blink">？</span></h1>
-  </header>
-
   <div class="main-layout">
     <div class="left-panel">
-      <div class="card pixel-border-gold" id="mainCard">
+      <div class="card pixel-border" id="mainCard">
         <div id="cardContent"></div>
       </div>
 
@@ -908,14 +891,27 @@
       const ri = getRatingInfo(r.rating);
       const emoji = getCategoryEmoji(r.category);
 
+      const ratingText = r.rating > 0 ? ri.label + ' ' + r.rating : ri.label;
+      const card = document.getElementById('mainCard');
+      card.style.borderColor = ri.color;
+      card.style.boxShadow = `4px 0 0 0 ${ri.color},-4px 0 0 0 ${ri.color},0 4px 0 0 ${ri.color},0 -4px 0 0 ${ri.color}`;
+
       document.getElementById('cardContent').innerHTML = `
-        <span class="category">${r.category}</span>
-        <span class="rating-tag" style="color:${ri.color};border-color:${ri.color};background:${ri.bg};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
-        <div class="food-icon">${emoji}</div>
-        <h2>${r.name}</h2>
-        <p class="description">${r.description}</p>
-        <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
-        <a class="map-link" href="${r.maps}" target="_blank" rel="noopener">[ Google Maps ]</a>
+        <div class="card-header" style="background:${ri.bg};color:${ri.color};border-bottom:2px solid ${ri.color};">
+          <span class="shimmer"></span>
+          今日推荐
+        </div>
+        <div class="card-body">
+          <span class="food-emoji">${emoji}</span>
+          <h2 class="shop-name" style="color:${ri.color};">${r.name}</h2>
+          <div class="tags">
+            <span class="tag-item" style="color:#ff6666;border-color:#ff6666;">${r.category}</span>
+            <span class="tag-item" style="color:${ri.color};border-color:${ri.color};">${ratingText}</span>
+          </div>
+          <p class="description">${r.description}</p>
+          <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
+          <a class="map-link" href="${r.maps}" target="_blank" rel="noopener">[ Google Maps ]</a>
+        </div>
       `;
 
     }
