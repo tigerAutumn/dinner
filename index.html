@@ -866,6 +866,33 @@
         rating: 3.27,
         lat: 34.60395, lng: 135.51390
       },
+      {
+        name: "ア・ラ・ルーシュ", category: "法式料理",
+        address: "住吉区苅田3-17-4 エクセルアビコ1F",
+        description: "住吉区の隠れた名店フレンチ。ランチコースも人気。月火定休。",
+        hours: "12:00-14:00/18:00-22:00", closed: [1, 2],
+        maps: "https://tabelog.com/osaka/A2701/A270404/27039880/",
+        rating: 3.64,
+        lat: 34.60196, lng: 135.51373
+      },
+      {
+        name: "もつ鍋と馬刺し ゆうひめ", category: "居酒屋",
+        address: "住吉区苅田3-13-12 1F",
+        description: "もつ鍋と九州直送馬刺しの専門店。あびこ駅徒歩4分。",
+        hours: "17:00-23:00", closed: [],
+        maps: "https://tabelog.com/osaka/A2701/A270404/27052253/",
+        rating: 3.20,
+        lat: 34.60191, lng: 135.51401
+      },
+      {
+        name: "酒暮レ屋", category: "居酒屋",
+        address: "住吉区苅田3-12-12",
+        description: "こだわりの自家製料理とお得なドリンク。半個室あり。",
+        hours: "月-金 11:00-14:30/17:30-23:00 土 17:30-23:00", closed: [0],
+        maps: "https://tabelog.com/osaka/A2701/A270404/27141961/",
+        rating: 3.23,
+        lat: 34.60144, lng: 135.51386
+      },
       // ============ 長居東2丁目 ============
       {
         name: "マクドナルド 長居公園通り店", category: "快餐",
@@ -956,6 +983,8 @@
       '炸鸡': '🍗',
       '东南亚料理': '🥥',
       '烤鸡串': '🍢',
+      '居酒屋': '🏮',
+      '法式料理': '🇫🇷',
     };
 
     // 把emoji画到小Canvas再放大 → 像素化效果
@@ -1067,7 +1096,7 @@
     }
 
     // 地铁站标记：方块
-    function createSquareIcon(color, size) {
+    function createSquareIcon(color, size, label = 'M') {
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
@@ -1080,12 +1109,11 @@
       ctx.lineWidth = 1.5;
       ctx.strokeRect(pad, pad, size - pad * 2, size - pad * 2);
 
-      // 中间画个"M"表示Metro
       ctx.fillStyle = '#fff';
       ctx.font = `bold ${Math.floor(size * 0.4)}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('M', size / 2, size / 2);
+      ctx.fillText(label, size / 2, size / 2);
 
       return L.icon({
         iconUrl: canvas.toDataURL(),
@@ -1178,8 +1206,8 @@
         <div style="color:#999;font-size:0.65rem;">Osaka Metro 御堂筋線 あびこ駅</div>
       `, { className: 'pixel-popup' });
 
-      // 自宅标记（绿色方块）
-      const homeIcon = createSquareIcon('#44ff44', 26);
+      // 自宅标记（青色方块带H标识）
+      const homeIcon = createSquareIcon('#00cccc', 26, 'H');
       const homeMarker = L.marker([34.604202, 135.522018], { icon: homeIcon, zIndexOffset: 500 }).addTo(map);
       homeMarker.bindPopup(`
         <div class="popup-name">自宅</div>
