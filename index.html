@@ -1102,9 +1102,9 @@
     function getRatingInfo(rating) {
       if (rating <= 0) return { label: '? 未鉴定', color: '#ffcc00', bg: '#2a2a00' };
       if (rating >= 3.60) return { label: '传说', color: '#ff8800', bg: '#3d2200' };
-      if (rating >= 3.45) return { label: '史诗', color: '#cc44ff', bg: '#2a0033' };
-      if (rating >= 3.30) return { label: '稀有', color: '#4488ff', bg: '#001a3d' };
-      if (rating >= 3.10) return { label: '优秀', color: '#44ff44', bg: '#003300' };
+      if (rating >= 3.50) return { label: '史诗', color: '#cc44ff', bg: '#2a0033' };
+      if (rating >= 3.40) return { label: '稀有', color: '#4488ff', bg: '#001a3d' };
+      if (rating >= 3.30) return { label: '优秀', color: '#44ff44', bg: '#003300' };
       if (rating >= 3.00) return { label: '普通', color: '#aaaaaa', bg: '#222222' };
       return { label: '? 未鉴定', color: '#ffcc00', bg: '#2a2a00' };
     }
