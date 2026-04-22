@@ -34,22 +34,6 @@
       border-color: #555;
     }
 
-    .pixel-border-gold {
-      border: 4px solid;
-      box-shadow:
-        4px 0 0 0 #e0a030,
-        -4px 0 0 0 #e0a030,
-        0 4px 0 0 #e0a030,
-        0 -4px 0 0 #e0a030,
-        4px 4px 0 0 #b07820,
-        -4px -4px 0 0 #ffcc44,
-        4px -4px 0 0 #e0a030,
-        -4px 4px 0 0 #e0a030;
-      border-color: #e0a030;
-    }
-
-
-
     /* 主布局：电脑端左右分栏 */
     .main-layout {
       display: flex;
@@ -71,9 +55,6 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-      }
-      .left-panel .card {
-        flex-shrink: 0;
       }
       .left-panel .list-section {
         flex: 1 0 0;
@@ -109,90 +90,6 @@
       height: 2rem;
     }
 
-    .card-title {
-      text-align: center;
-      padding: 0.8rem 1rem;
-    }
-
-    .card-title h1 {
-      font-size: 1.2rem;
-      color: #ff6688;
-      text-shadow: 2px 2px 0 #882244, 4px 4px 0 #0f0f23;
-      letter-spacing: 6px;
-      animation: blink 2s infinite;
-    }
-
-    .card {
-      background: #1a1a2e;
-      padding: 0;
-      margin: 0 0 1rem;
-      overflow: hidden;
-    }
-
-    .card-body {
-      padding: 1.2rem 1.5rem 1.5rem;
-      text-align: center;
-    }
-
-    .card-body .food-emoji {
-      font-size: 4rem;
-      margin: 0.5rem 0;
-      display: block;
-    }
-
-    .card-body .shop-name {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-      text-shadow: 2px 2px 0 #333;
-    }
-
-    .card-body .tags {
-      display: flex;
-      justify-content: center;
-      gap: 0.4rem;
-      margin-bottom: 0.8rem;
-      flex-wrap: wrap;
-    }
-
-    .card-body .tag-item {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      font-size: 0.65rem;
-      border: 2px solid;
-    }
-
-    .card-body .description {
-      color: #d4cfc4;
-      font-size: 0.75rem;
-      line-height: 1.8;
-      margin-bottom: 0.8rem;
-    }
-
-    .card-body .hours-info {
-      color: #c4bfb4;
-      font-size: 0.7rem;
-      margin-bottom: 0.8rem;
-      line-height: 1.6;
-    }
-
-    .card-body .map-link {
-      display: inline-block;
-      background: #333333;
-      color: #ffffff;
-      text-decoration: none;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.7rem;
-      font-family: 'DotGothic16', monospace;
-      border: 2px solid #ffffff;
-      cursor: pointer;
-      transition: all 0.1s;
-    }
-
-    .card-body .map-link:hover {
-      background: #ffffff;
-      color: #0f0f23;
-    }
-
     /* 地图区域 */
     .map-section {
       width: 100%;
@@ -200,8 +97,8 @@
 
     #mapContainer {
       width: 100%;
-      height: 60vh;
-      min-height: 400px;
+      height: 50vh;
+      min-height: 300px;
       border: 3px solid #555;
       background: #1a1a2e;
     }
@@ -262,25 +159,6 @@
       font-size: 18px;
     }
 
-    .map-legend {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-top: 0.5rem;
-      font-size: 0.65rem;
-      flex-wrap: wrap;
-    }
-
-    .map-legend span { color: #c4bfb4; }
-    .map-legend .dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin-right: 3px;
-      vertical-align: middle;
-      border: 1px solid #333;
-    }
-
     .list-section {
       width: 100%;
       margin: 0 0 2rem;
@@ -288,12 +166,12 @@
 
     .list-section h3 {
       font-size: 0.85rem;
-      color: #66ff66;
+      color: #ff6666;
       margin-bottom: 0.8rem;
       text-align: center;
     }
 
-    .list-section h3::before { content: "> "; color: #ffcc00; }
+    .list-section h3::before { content: "> "; color: #ff6666; }
 
     .filter-bar {
       display: flex;
@@ -315,8 +193,8 @@
     }
 
     .filter-btn:hover, .filter-btn.active {
-      border-color: #66ff66;
-      color: #66ff66;
+      border-color: #ff6666;
+      color: #ff6666;
     }
 
     .restaurant-list-grid {
@@ -364,6 +242,51 @@
       white-space: nowrap;
     }
 
+    /* 手机端优化：列表横向滑动 + 地图一屏展示 */
+    @media (max-width: 899px) {
+      .top-spacer { height: 0.5rem; }
+
+      .main-layout {
+        gap: 0.2rem;
+        padding: 0 0.5rem;
+      }
+
+      .list-section { margin: 0 0 0.3rem; }
+      .list-section h3 { font-size: 0.8rem; margin-bottom: 0.5rem; }
+
+      .filter-bar { margin-bottom: 0.6rem; }
+
+      .restaurant-list-grid {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .restaurant-list-grid::-webkit-scrollbar { display: none; }
+
+      .restaurant-item {
+        flex: 0 0 calc(100vw - 1rem);
+        scroll-snap-align: start;
+        padding: 0.6rem 0.6rem;
+      }
+      .restaurant-item .info h4 { font-size: 0.7rem; margin-bottom: 0; }
+      .restaurant-item .info span { font-size: 0.55rem; }
+      .restaurant-item .tag { font-size: 0.5rem; padding: 0.1rem 0.3rem; }
+
+      #mapContainer {
+        height: 63vh;
+        min-height: 330px;
+      }
+
+      .map-section { padding-bottom: 0.3rem; }
+
+    }
+
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
@@ -395,13 +318,8 @@
 
   <div class="main-layout">
     <div class="left-panel">
-      <div class="card pixel-border" id="mainCard">
-        <div class="card-title"><h1>今日推荐</h1></div>
-        <div id="cardContent"></div>
-      </div>
-
       <div class="list-section">
-    <h3>全部店铺（<span id="totalCount"></span>家）<span style="font-size:0.55rem;color:#666;margin-left:0.5rem;">评分来源：食べログ</span></h3>
+    <h3>全部店铺（<span id="totalCount"></span>家）<span style="font-size:0.7rem;color:#88ddcc;margin-left:0.5rem;">评分来源：食べログ</span></h3>
     <div class="filter-bar" id="filterBar"></div>
     <div class="restaurant-list-grid" id="restaurantList"></div>
       </div>
@@ -410,11 +328,6 @@
     <div class="right-panel">
       <div class="map-section">
         <div id="mapContainer" class="pixel-border"></div>
-        <div class="map-legend">
-          <span><span class="dot" style="background:#4488ff;"></span>车站</span>
-          <span><span class="dot" style="background:#ff4444;"></span>店铺</span>
-          <span><span class="dot" style="background:#44ff44;"></span>今日推荐</span>
-        </div>
       </div>
     </div><!-- right-panel -->
   </div><!-- main-layout -->
@@ -734,7 +647,7 @@
 {
         name: "炭火焼肉ホルモン 朱朱", category: "烤肉",
         address: "住吉区長居3-13-7",
-        description: "2025年7月新开。炭火烤肉・内脏专门店，京都もつ鍋系列。",
+        description: "2025年7月新开。炭火烤肉・内脏专门店，京都牛杂锅系列。",
         hours: "17:00-24:00", closed: [],
         maps: "https://maps.google.com/?q=炭火焼肉ホルモン+朱朱+長居",
         rating: 3.11,
@@ -743,7 +656,7 @@
       {
         name: "ソウリュウ SouRyu", category: "中餐",
         address: "住吉区苅田5-6-5 メゾン大友105",
-        description: "あびこ駅徒歩3分の中華料理店。",
+        description: "我孙子站步行3分钟的中华料理店。",
         hours: "17:30-21:00", closed: ["月"],
         maps: "https://maps.app.goo.gl/5kyckYx7iL9eaXYKA",
         rating: 0,
@@ -752,7 +665,7 @@
       {
         name: "Italian Kitchen VANSAN あびこ店", category: "意大利料理",
         address: "住吉区苅田5-13-14",
-        description: "生パスタとピザの人気チェーン。TV番組でも紹介。营业到23点。",
+        description: "生意面和披萨的人气连锁店。电视节目也有介绍。营业到23点。",
         hours: "11:00-23:00", closed: [],
         maps: "https://maps.app.goo.gl/v2hHkt1FrMyb5um5A",
         rating: 3.09,
@@ -761,7 +674,7 @@
       {
         name: "炭火焼鳥 とこ葉 あびこ店", category: "烤鸡串",
         address: "住吉区苅田5-19-5",
-        description: "あびこ駅徒歩3分。落ち着いた雰囲気の炭火焼鳥店。营业到深夜3点。",
+        description: "我孙子站步行3分钟。氛围沉稳的炭火烤鸡串店。营业到深夜3点。",
         hours: "17:00-03:00", closed: [],
         maps: "https://maps.app.goo.gl/AdtNyh1peDS6PXMm6",
         rating: 3.21,
@@ -770,7 +683,7 @@
       {
         name: "サイゼリヤ あびこ駅前店", category: "意大利料理",
         address: "住吉区苅田7-12-34 プラザあびこビル2F",
-        description: "コスパ最強のイタリアンファミレス。营业到深夜0点。",
+        description: "性价比最强的意大利家庭餐厅。营业到深夜0点。",
         hours: "11:00-00:00", closed: [],
         maps: "https://maps.app.goo.gl/NHRrMyBjMSQavjBB9",
         rating: 3.04,
@@ -779,7 +692,7 @@
       {
         name: "中華そば 閃", category: "拉面",
         address: "住吉区苅田7-6-15",
-        description: "食べログ百名店。煮干し香る醤油中華そば、無添加素材にこだわり。カウンター8席。",
+        description: "食べログ百名店。煮干鱼的醇香酱油中华拉面，坚持无添加食材。吧台8席。",
         hours: "11:30-14:30/18:00-22:00", closed: ["月"],
         maps: "https://maps.app.goo.gl/bw197L4wRtfA5xTE6",
         rating: 3.72,
@@ -788,7 +701,7 @@
       {
         name: "きりん寺 あびこ店", category: "拉面",
         address: "住吉区苅田7-6-20",
-        description: "油そば・まぜそば専門チェーン。2024年11月新开。现金のみ。",
+        description: "油拌面・拌面专门连锁店。2024年11月新开。仅限现金。",
         hours: "11:00-15:30/17:00-22:00", closed: [],
         maps: "https://maps.app.goo.gl/mfQJY6APRPkptWYi7",
         rating: 3.01,
@@ -797,7 +710,7 @@
       {
         name: "Il Mare", category: "意大利料理",
         address: "住吉区苅田7-9-8",
-        description: "新鮮な魚介にこだわるイタリアン。カウンター含む約20席。あびこ駅近く。",
+        description: "主打新鲜海鲜的意大利料理。含吧台约20席。我孙子站附近。",
         hours: "11:30-13:45/17:30-21:30", closed: ["火", "水"],
         maps: "https://maps.app.goo.gl/Uh7MdxECFCnYaKe26",
         rating: 3.11,
@@ -806,7 +719,7 @@
       {
         name: "ラーメン魁力屋 我孫子店", category: "拉面",
         address: "住吉区我孫子東1-5-2",
-        description: "京都北白川発祥の背脂醤油ラーメンチェーン。麺の硬さ・背脂量カスタム可。营业到23点。",
+        description: "京都北白川发祥的背脂酱油拉面连锁。面硬度・背脂量可自选。营业到23点。",
         hours: "11:00-23:00", closed: [],
         maps: "https://maps.app.goo.gl/yCJqpxTMG7ousbSQ8",
         rating: 3.05,
@@ -815,7 +728,7 @@
       {
         name: "カレー喫茶魚子", category: "咖喱",
         address: "住吉区長居東1-26-12",
-        description: "インド・ネパール系カレーの喫茶店。ダルバートやビリヤニが人気。金土は夜も営業。",
+        description: "印度・尼泊尔系咖喱喫茶店。达尔巴特和印度炒饭人气高。周五六晚上也营业。",
         hours: "11:00-15:00", closed: ["木"],
         maps: "https://maps.app.goo.gl/cSiF19qYD1aEyLGw9",
         rating: 3.07,
@@ -824,7 +737,7 @@
       {
         name: "ガンジス あびこ店", category: "印度料理",
         address: "住吉区苅田7-4-23",
-        description: "本格インドカレー専門店。スパイスにこだわり。サモサやナンも人気。营业到23:30。",
+        description: "正宗印度咖喱专门店。讲究香料。咖喱角和馕饼也很受欢迎。营业到23:30。",
         hours: "11:00-15:30/17:00-23:30", closed: [],
         maps: "https://maps.app.goo.gl/wuDFAXDD2dm4tSJC9",
         rating: 3.39,
@@ -833,7 +746,7 @@
       {
         name: "葡萄屋", category: "喫茶店",
         address: "住吉区苅田7-4-23",
-        description: "創業40年の老舗喫茶店。ハンバーグ・ピラフ・カレー等の定食がリーズナブル。20時閉店。",
+        description: "创业40年的老牌喫茶店。汉堡排・焗饭・咖喱等定食价格实惠。20点关店。",
         hours: "7:30-20:00", closed: ["木"],
         maps: "https://maps.google.com/?q=葡萄屋+苅田7-4-23",
         rating: 3.15,
@@ -842,7 +755,7 @@
       {
         name: "まる喜", category: "烤肉",
         address: "住吉区苅田3-16-26",
-        description: "焼肉・韓国料理の居酒屋。あびこ駅近く。营业到23点。",
+        description: "烤肉・韩国料理居酒屋。我孙子站附近。营业到23点。",
         hours: "17:00-23:00", closed: ["火"],
         maps: "https://maps.app.goo.gl/vAyDYimZjUmfyUZy5",
         rating: 3.16,
@@ -851,7 +764,7 @@
       {
         name: "広島焼き ののすけ", category: "大阪烧",
         address: "住吉区苅田2-16-5 レジデンス寿1F",
-        description: "広島風お好み焼き専門店。カウンター含む15席。あびこ駅近く。",
+        description: "广岛风大阪烧专门店。含吧台15席。我孙子站附近。",
         hours: "11:00-14:00/17:30-22:00", closed: ["日"],
         maps: "https://maps.app.goo.gl/CCLUU8v3dpy2SR9A9",
         rating: 3.27,
@@ -860,7 +773,7 @@
       {
         name: "薩摩 茶美豚 とんかつ 花", category: "炸猪排",
         address: "住吉区苅田7-12-19",
-        description: "鹿児島産茶美豚を使用したとんかつ専門店。ご飯おかわり自由。",
+        description: "使用鹿儿岛产茶美猪的炸猪排专门店。米饭免费续添。",
         hours: "11:00-21:30", closed: [],
         maps: "https://maps.google.com/?q=とんかつ花+苅田7-12-19",
         rating: 3.41,
@@ -869,7 +782,7 @@
       {
         name: "迎日楽", category: "中餐",
         address: "住吉区苅田7-4-23 ハイマートあびこマンション1F",
-        description: "あびこの老舗中華料理店。ふかひれから定食まで幅広い品揃え。深夜営業。",
+        description: "我孙子的老牌中华料理店。从鱼翅到定食品种丰富。深夜营业。",
         hours: "11:00-24:00", closed: [],
         maps: "https://maps.google.com/?q=迎日楽+苅田7-4-23",
         rating: 3.38,
@@ -878,7 +791,7 @@
       {
         name: "エスカルゴ", category: "法式料理",
         address: "住吉区苅田7-7-5 西村第2マンション1F",
-        description: "あびこの人気ビストロ。手頃な価格で本格フレンチが楽しめる。",
+        description: "我孙子的人气小酒馆。实惠价格享受正宗法餐。",
         hours: "11:30-14:30/18:00-21:30", closed: [4],
         maps: "https://maps.google.com/?q=エスカルゴ+苅田7-7-5",
         rating: 3.46,
@@ -887,7 +800,7 @@
       {
         name: "麺屋 生粋", category: "拉面",
         address: "住吉区苅田7-6-2",
-        description: "あびこの実力派ラーメン店。火曜定休。売り切れ次第終了。",
+        description: "我孙子的实力派拉面店。周二定休。售完即止。",
         hours: "11:00-15:00/17:00-23:00", closed: [2],
         maps: "https://maps.google.com/?q=麺屋+生粋+苅田7-6-2",
         rating: 3.40,
@@ -896,7 +809,7 @@
       {
         name: "中華旬菜 士庵", category: "中餐",
         address: "住吉区苅田7-9-8 ベルクレールアビコ1F",
-        description: "旬の素材を使った本格中華料理。ランチセットがお得。",
+        description: "使用当季食材的正宗中华料理。午餐套餐划算。",
         hours: "11:30-14:00/17:00-22:00", closed: [2],
         maps: "https://maps.google.com/?q=中華旬菜+士庵+苅田7-9-8",
         rating: 3.40,
@@ -905,7 +818,7 @@
       {
         name: "手打そば 和", category: "乌冬・荞麦",
         address: "住吉区苅田5-7-2",
-        description: "手打ちの本格蕎麦。売り切れ次第終了。火曜定休。",
+        description: "手打正宗荞麦面。售完即止。周二定休。",
         hours: "11:30-14:00/18:00-21:30（土日祝 11:30-15:00/17:00-21:00）", closed: [2],
         maps: "https://maps.google.com/?q=手打そば+和+苅田5-7-2",
         rating: 3.39,
@@ -914,7 +827,7 @@
       {
         name: "スパイスマート", category: "咖喱",
         address: "住吉区苅田6-17-17 松本コーポラス1F",
-        description: "ネパール人シェフのスパイスカレー。ナンもライスも本格派。年中無休。",
+        description: "尼泊尔厨师的香料咖喱。馕饼和米饭都是正宗派。全年无休。",
         hours: "11:00-22:00", closed: [],
         maps: "https://maps.google.com/?q=スパイスマート+苅田6-17-17",
         rating: 3.37,
@@ -923,7 +836,7 @@
       {
         name: "アジアンバー・ラマイ あびこ店", category: "咖喱",
         address: "住吉区苅田7-12-5 セントラルハイツ1F",
-        description: "北海道発の人気スープカレー専門店。具材たっぷりで辛さ選択可。",
+        description: "北海道发祥的人气汤咖喱专门店。食材丰富，辣度可选。",
         hours: "11:30-21:30", closed: [],
         maps: "https://maps.google.com/?q=ラマイ+あびこ店+苅田7-12-5",
         rating: 3.36,
@@ -932,7 +845,7 @@
       {
         name: "トラットリア ボーノボーノ", category: "意大利料理",
         address: "住吉区苅田5-17-17 コーポみやざき1F",
-        description: "あびこの隠れ家イタリアン。パスタ・ケーキが人気。水曜定休。",
+        description: "我孙子的隐藏意大利料理。意面・蛋糕人气高。周三定休。",
         hours: "11:30-15:00/17:30-22:00", closed: [3],
         maps: "https://maps.google.com/?q=トラットリア+ボーノボーノ+苅田5-17-17",
         rating: 3.35,
@@ -941,7 +854,7 @@
       {
         name: "回転ずしとら", category: "寿司",
         address: "住吉区苅田5-13-23",
-        description: "地元で愛される回転寿司。ネタが新鮮でコスパ良し。",
+        description: "深受当地人喜爱的回转寿司。食材新鲜性价比高。",
         hours: "11:00-20:30", closed: [3],
         maps: "https://maps.google.com/?q=回転ずしとら+苅田5-13-23",
         rating: 3.34,
@@ -950,7 +863,7 @@
       {
         name: "タケモト", category: "意大利料理",
         address: "住吉区苅田7-9-15 アスルシエロ苅田1F",
-        description: "あびこ駅近くの本格イタリアン。ランチもディナーも充実。水曜定休。",
+        description: "我孙子站附近的正宗意大利料理。午餐晚餐都很充实。周三定休。",
         hours: "11:30-14:30/17:30-22:00", closed: [3],
         maps: "https://maps.google.com/?q=タケモト+イタリアン+苅田7-9-15",
         rating: 3.29,
@@ -959,7 +872,7 @@
       {
         name: "炭火焼ステーキ あおき", category: "烤肉",
         address: "住吉区苅田7-3-4",
-        description: "炭火焼きの本格ステーキ。ランチもディナーもリーズナブル。",
+        description: "炭火烤正宗牛排。午餐晚餐价格都很实惠。",
         hours: "11:30-14:00/17:30-22:00", closed: [2],
         maps: "https://maps.google.com/?q=炭火焼ステーキ+あおき+苅田7-3-4",
         rating: 3.28,
@@ -968,7 +881,7 @@
       {
         name: "七つの壁", category: "大阪烧",
         address: "住吉区苅田7-12-19",
-        description: "お好み焼き・焼きそば・鉄板焼き。ランチ営業あり。木曜定休。",
+        description: "大阪烧・炒面・铁板烧。有午餐营业。周四定休。",
         hours: "11:30-22:00（月曜 17:00-22:00）", closed: [4],
         maps: "https://maps.google.com/?q=七つの壁+苅田7-12-19",
         rating: 3.27,
@@ -977,7 +890,7 @@
       {
         name: "どっこい処", category: "寿司",
         address: "住吉区苅田7-12-28 常盤ビル1F",
-        description: "あびこの本格寿司。ランチ・ディナー両方営業。水曜定休。",
+        description: "我孙子的正宗寿司店。午餐・晚餐都营业。周三定休。",
         hours: "11:00-15:00/17:00-23:00", closed: [3],
         maps: "https://maps.google.com/?q=どっこい処+苅田7-12-28",
         rating: 3.27,
@@ -986,7 +899,7 @@
       {
         name: "和洋ダイニングケイ", category: "西餐",
         address: "住吉区苅田5-13-19",
-        description: "和洋折衷の創作料理。あびこ駅徒歩3分。月曜定休。",
+        description: "和洋折衷的创作料理。我孙子站步行3分钟。周一定休。",
         hours: "11:30-14:30/18:00-22:00", closed: [1],
         maps: "https://maps.google.com/?q=和洋ダイニングケイ+苅田5-13-19",
         rating: 3.26,
@@ -995,7 +908,7 @@
       {
         name: "本場博多ラーメン 一号艇", category: "拉面",
         address: "住吉区苅田7-12-19",
-        description: "博多豚骨ラーメンと油そばの専門店。深夜営業あり。年中無休。",
+        description: "博多豚骨拉面和油拌面专门店。有深夜营业。全年无休。",
         hours: "11:30-15:00/18:00-翌1:00（金土 -翌2:00）", closed: [],
         maps: "https://maps.google.com/?q=博多ラーメン+一号艇+苅田7-12-19",
         rating: 3.25,
@@ -1004,7 +917,7 @@
       {
         name: "寿し兆", category: "寿司",
         address: "住吉区苅田3-17-18",
-        description: "あびこの老舗寿司・海鮮料理店。深夜まで営業。",
+        description: "我孙子的老牌寿司・海鲜料理店。营业到深夜。",
         hours: "12:00-13:30/17:00-24:00（土 17:00-24:00）", closed: [],
         maps: "https://maps.google.com/?q=寿し兆+苅田3-17-18",
         rating: 3.24,
@@ -1013,7 +926,7 @@
       {
         name: "大富士", category: "炸猪排",
         address: "住吉区苅田6-3-13",
-        description: "地元に愛される洋食・とんかつ店。ランチ・ディナー営業。木曜定休。",
+        description: "深受当地人喜爱的洋食・炸猪排店。午餐・晚餐营业。周四定休。",
         hours: "11:00-14:00/17:00-20:00", closed: [4],
         maps: "https://maps.app.goo.gl/zStFD2RLQ9n6yuzn9",
         rating: 3.14,
@@ -1023,7 +936,7 @@
       {
         name: "デニーズ 長居公園店", category: "定食・盖饭",
         address: "住吉区長居東2-2-23",
-        description: "24時間営業のファミリーレストラン。メニュー豊富で深夜も利用可。",
+        description: "24小时营业的家庭餐厅。菜单丰富，深夜也可利用。",
         hours: "6:00-24:00", closed: [],
         maps: "https://maps.app.goo.gl/81ePCQbM4KeTgqUx7",
         rating: 3.07,
@@ -1032,7 +945,7 @@
       {
         name: "マクドナルド 長居公園通り店", category: "快餐",
         address: "住吉区長居東2-1-32",
-        description: "長居公園通り沿いの24時間マクドナルド。ドライブスルーあり。",
+        description: "长居公园通沿线的24小时麦当劳。有得来速。",
         hours: "24時間（金曜 5:00-24:00）", closed: [],
         maps: "https://maps.app.goo.gl/MFTZBiRTiXarnFWZ8",
         rating: 3.04,
@@ -1124,34 +1037,6 @@
     // 把emoji画到小Canvas再放大 → 像素化效果
     function getCategoryEmoji(category) {
       return emojiMap[category] || '🍴';
-    }
-
-    function renderCard() {
-      currentPickIdx = getDailyPick();
-      const r = restaurants[currentPickIdx];
-      const closedText = getClosedText(r);
-      const ri = getRatingInfo(r.rating);
-      const emoji = getCategoryEmoji(r.category);
-
-      const ratingText = r.rating > 0 ? ri.label + ' ' + r.rating : ri.label;
-      const card = document.getElementById('mainCard');
-      card.style.borderColor = ri.color;
-      card.style.boxShadow = `4px 0 0 0 ${ri.color},-4px 0 0 0 ${ri.color},0 4px 0 0 ${ri.color},0 -4px 0 0 ${ri.color}`;
-
-      document.getElementById('cardContent').innerHTML = `
-        <div class="card-body">
-          <span class="food-emoji">${emoji}</span>
-          <h2 class="shop-name" style="color:${ri.color};">${r.name}</h2>
-          <div class="tags">
-            <span class="tag-item" style="color:#ff6666;border-color:#ff6666;">${r.category}</span>
-            <span class="tag-item" style="color:${ri.color};border-color:${ri.color};">${ratingText}</span>
-          </div>
-          <p class="description">${r.description}</p>
-          <p class="hours-info">营业 ${r.hours}${closedText ? ' / 定休 ' + closedText : ''}</p>
-          <a class="map-link" href="${r.maps}" target="_blank" rel="noopener">[ Google Maps ]</a>
-        </div>
-      `;
-
     }
 
     function getCategories() {
@@ -1351,7 +1236,7 @@
       // 显示所有标记的范围
       const allMarkers = [...markers, nagaiMarker, abikoMarker, homeMarker];
       const group = new L.featureGroup(allMarkers);
-      map.fitBounds(group.getBounds().pad(0.1));
+      map.fitBounds(group.getBounds().pad(0.02));
     }
 
     function highlightOnMap(idx) {
@@ -1370,8 +1255,7 @@
         <div class="popup-cat" style="color:${ratingColor};">${r.rating > 0 ? getRatingInfo(r.rating).label + ' ' + r.rating : getRatingInfo(r.rating).label} | ${r.category}</div>
         <div style="color:#c4bfb4;font-size:0.65rem;margin-top:2px;">${r.description}</div>
         <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
-      `, { className: 'pixel-popup', maxWidth: 250 }).openPopup();
-      highlightMarker.getPopup().getElement().style.setProperty('--popup-color', ratingColor);
+      `, { className: 'pixel-popup', maxWidth: 250 });
     }
 
     // 鼠标悬停列表项时在地图上显示对应的popup
@@ -1382,7 +1266,7 @@
     }
 
     // 初始化
-    renderCard();
+    currentPickIdx = getDailyPick();
     renderFilters();
     renderList();
     initMap();
