@@ -1256,6 +1256,10 @@
         <div style="color:#c4bfb4;font-size:0.65rem;margin-top:2px;">${r.description}</div>
         <a class="popup-link" href="${r.maps}" target="_blank" rel="noopener">Google Maps >></a>
       `, { className: 'pixel-popup', maxWidth: 250 });
+      highlightMarker.on('popupopen', () => {
+        highlightMarker.getPopup().getElement().style.setProperty('--popup-color', ratingColor);
+      });
+      highlightMarker.openPopup();
     }
 
     // 鼠标悬停列表项时在地图上显示对应的popup
