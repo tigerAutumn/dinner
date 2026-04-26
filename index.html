@@ -1211,16 +1211,8 @@
         <div style="color:#999;font-size:0.65rem;">Osaka Metro 御堂筋線 あびこ駅</div>
       `, { className: 'pixel-popup' });
 
-      // 自宅标记（青色方块带H标识）
-      const homeIcon = createSquareIcon('#00cccc', 26, 'H');
-      const homeMarker = L.marker([34.604202, 135.522018], { icon: homeIcon, zIndexOffset: 500 }).addTo(map);
-      homeMarker.bindPopup(`
-        <div class="popup-name">自宅</div>
-        <div style="color:#999;font-size:0.65rem;">UR サンヴァリエ東長居 16号棟</div>
-      `, { className: 'pixel-popup' });
-
       // 显示所有标记的范围
-      const allMarkers = [...markers, nagaiMarker, abikoMarker, homeMarker];
+      const allMarkers = [...markers, nagaiMarker, abikoMarker];
       const group = new L.featureGroup(allMarkers);
       map.fitBounds(group.getBounds().pad(0.02));
     }
