@@ -1056,15 +1056,17 @@
         const closed = isClosedToday(r);
         const emoji = getCategoryEmoji(r.category);
         const isPick = restaurants.indexOf(r) === currentPickIdx;
+        // 今日推荐统一用粉色覆盖等级色
+        const accent = isPick ? '#ff66aa' : ri.color;
         return `
-          <div class="restaurant-item${closed ? ' closed-today' : ''}${isPick ? ' today-pick' : ''}" style="--rating-color:${ri.color};" onclick="focusMarker(${restaurants.indexOf(r)})">
+          <div class="restaurant-item${closed ? ' closed-today' : ''}${isPick ? ' today-pick' : ''}" style="--rating-color:${accent};" onclick="focusMarker(${restaurants.indexOf(r)})">
             <span style="font-size:1.2rem;flex-shrink:0;margin-right:0.5rem;">${emoji}</span>
             <div class="info" style="flex:1;min-width:0;">
-              <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}${isPick ? ' <span class="today-pick-badge">今日推荐</span>' : ''}</h4>
+              <h4 style="color:${closed ? '#555' : accent};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}${isPick ? ' <span class="today-pick-badge">今日推荐</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
-              <span class="tag" style="color:${closed ? '#555' : ri.color};border-color:${closed ? '#333' : ri.color};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
+              <span class="tag" style="color:${closed ? '#555' : accent};border-color:${closed ? '#333' : accent};">${r.rating > 0 ? ri.label + ' ' + r.rating : ri.label}</span>
               <span class="tag" style="margin-top:4px;display:block;${closed ? 'color:#555;border-color:#333;' : ''}">${r.category}</span>
             </div>
           </div>`;
@@ -1231,7 +1233,7 @@
         map.removeLayer(highlightMarker);
       }
 
-      const ratingColor = getRatingInfo(r.rating).color;
+      const ratingColor = '#ff66aa'; // 今日推荐统一粉色（与列表 today-pick / 边框同色）
       const goldIcon = createStarIcon('#ff66aa', 36);
       highlightMarker = L.marker([r.lat, r.lng], { icon: goldIcon, zIndexOffset: 1000 }).addTo(map);
       highlightMarker.bindPopup(`
