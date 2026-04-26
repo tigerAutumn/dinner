@@ -233,12 +233,7 @@
       50% { opacity: 0.3; }
     }
 
-    .today-pick-badge {
-      font-size: 0.8rem;
-      color: #ff66aa;
-      margin-left: 0.4rem;
-      font-weight: bold;
-      letter-spacing: 0.05em;
+    .restaurant-item.today-pick h4 {
       animation: blink 1s ease-in-out infinite;
     }
 
@@ -1062,7 +1057,7 @@
           <div class="restaurant-item${closed ? ' closed-today' : ''}${isPick ? ' today-pick' : ''}" style="--rating-color:${accent};" onclick="focusMarker(${restaurants.indexOf(r)})">
             <span style="font-size:1.2rem;flex-shrink:0;margin-right:0.5rem;">${emoji}</span>
             <div class="info" style="flex:1;min-width:0;">
-              <h4 style="color:${closed ? '#555' : accent};">${isPick ? '<span class="today-pick-badge">今日推荐</span> &gt;&gt; ' : ''}${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
+              <h4 style="color:${closed ? '#555' : accent};">${isPick ? '今日推荐 &gt;&gt; ' : ''}${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
