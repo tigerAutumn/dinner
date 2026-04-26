@@ -223,6 +223,29 @@
       opacity: 0.4;
     }
 
+    .restaurant-item.today-pick {
+      border-color: #ff66aa;
+      box-shadow: 0 0 12px rgba(255, 102, 170, 0.55);
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .today-pick-badge {
+      display: inline-block;
+      font-size: 0.55rem;
+      color: #1a1a2e;
+      background: #ff66aa;
+      padding: 0.1rem 0.4rem;
+      margin-left: 0.4rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      animation: blink 1s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
     .restaurant-item .info h4 {
       font-size: 0.8rem;
       margin-bottom: 0.2rem;
@@ -1066,17 +1089,26 @@
         : [...restaurants]
       ).sort((a, b) => b.rating - a.rating);
 
+      // 今日推荐置顶（仅在过滤后仍可见时）
+      const pickRestaurant = restaurants[currentPickIdx];
+      const pickIdxInFiltered = filtered.indexOf(pickRestaurant);
+      if (pickIdxInFiltered > 0) {
+        filtered.splice(pickIdxInFiltered, 1);
+        filtered.unshift(pickRestaurant);
+      }
+
       document.getElementById('totalCount').textContent = filtered.length;
 
       list.innerHTML = filtered.map((r, i) => {
         const ri = getRatingInfo(r.rating);
         const closed = isClosedToday(r);
         const emoji = getCategoryEmoji(r.category);
+        const isPick = restaurants.indexOf(r) === currentPickIdx;
         return `
-          <div class="restaurant-item${closed ? ' closed-today' : ''}" style="--rating-color:${ri.color};" onclick="focusMarker(${restaurants.indexOf(r)})">
+          <div class="restaurant-item${closed ? ' closed-today' : ''}${isPick ? ' today-pick' : ''}" style="--rating-color:${ri.color};" onclick="focusMarker(${restaurants.indexOf(r)})">
             <span style="font-size:1.2rem;flex-shrink:0;margin-right:0.5rem;">${emoji}</span>
             <div class="info" style="flex:1;min-width:0;">
-              <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}</h4>
+              <h4 style="color:${closed ? '#555' : ri.color};">${r.name}${closed ? ' <span style="color:#ff4444;font-size:0.6rem;">定休</span>' : ''}${isPick ? ' <span class="today-pick-badge">👑 今日推荐</span>' : ''}</h4>
               <span>${r.hours}${getClosedText(r) ? ' | 休 ' + getClosedText(r) : ''}</span>
             </div>
             <div style="text-align:right;">
